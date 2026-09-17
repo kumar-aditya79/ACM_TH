@@ -1,0 +1,8 @@
+# Reference material used only for analysis — Money Heist clip (copyright) + contact sheets, large
+reference/
+
+# OS / Python cruft
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
