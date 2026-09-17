@@ -833,10 +833,10 @@ function workshopSign(b, h) {
   g.fillStyle = '#1f4f96';
   g.fillRect(0, 0, c.width, c.height);
   g.fillStyle = '#ffffff';
-  g.font = 'bold 84px Oswald, Arial, sans-serif';
+  g.font = 'bold 56px Oswald, Arial, sans-serif';
   g.textAlign = 'center';
   g.textBaseline = 'middle';
-  g.fillText('ASHOK LEYLAND', c.width / 2, c.height / 2 + 4);
+  g.fillText('ASHOK LEYLAND · SERVICE TRAINING', c.width / 2, c.height / 2 + 4);
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
   const mat = wallMaterial(tex);
@@ -846,6 +846,49 @@ function workshopSign(b, h) {
   sign.position.copy(P((x1 + x2) / 2 + nx * .12, (y1 + y2) / 2 + ny * .12, h - .9));
   sign.rotation.y = Math.atan2(-ey, ex) + (nx * -ey + ny * ex < 0 ? Math.PI : 0);   // face outward so the text isn't mirrored
   return sign;
+}
+
+// a canvas text panel that reveals with the rest of the walls (like the workshop sign)
+function textSign(text, { fg = '#2f5aa8', bg = '#ffffff', size = 82 } = {}) {
+  const c = document.createElement('canvas');
+  c.width = 1024; c.height = 132;
+  const g = c.getContext('2d');
+  g.fillStyle = bg; g.fillRect(0, 0, c.width, c.height);
+  g.fillStyle = fg;
+  g.font = `bold ${size}px Oswald, Arial, sans-serif`;
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  let s = size;
+  while (g.measureText(text).width > c.width - 40 && s > 26) { s -= 4; g.font = `bold ${s}px Oswald, Arial, sans-serif`; }
+  g.fillText(text, c.width / 2, c.height / 2 + 4);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const mat = wallMaterial(tex);
+  mat.side = THREE.DoubleSide;
+  wallMats.push(mat);
+  return mat;
+}
+// a named entrance: a projecting portal canopy on two legs, with the sign across the front (entrance photos)
+function entranceSign(b, edge, text, { fg = '#2f5aa8', canopyMat = greyRoof, signW = 11, signH = 1.4, top = 4.6, proj = 2.4 } = {}) {
+  const [[x1, y1], [x2, y2]] = edge, { ex, ey, nx, ny } = wallFrame(b, edge);
+  const cx = (x1 + x2) / 2, cy = (y1 + y2) / 2, W = signW + 1.4;
+  const yaw = Math.atan2(-ey, ex);
+  const faceYaw = yaw + (nx * -ey + ny * ex < 0 ? Math.PI : 0);   // so the text faces out, not mirrored
+  const g = new THREE.Group();
+  const canopy = new THREE.Mesh(new THREE.BoxGeometry(W, .55, proj), canopyMat);
+  canopy.position.copy(P(cx + nx * proj / 2, cy + ny * proj / 2, top));
+  canopy.rotation.y = yaw;
+  g.add(canopy);
+  for (const s of [-(W / 2) + .35, W / 2 - .35]) {              // two portal legs at the front corners
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(.5, top, .5), canopyMat);
+    leg.position.copy(P(cx + ex * s + nx * (proj - .35), cy + ey * s + ny * (proj - .35), top / 2));
+    leg.rotation.y = yaw;
+    g.add(leg);
+  }
+  const sign = new THREE.Mesh(new THREE.PlaneGeometry(signW, signH), textSign(text, { fg }));
+  sign.position.copy(P(cx + nx * (proj + .06), cy + ny * (proj + .06), top - signH / 2 - .18));
+  sign.rotation.y = faceYaw;
+  g.add(sign);
+  return g;
 }
 
 function schoolLouvers(b, h) {
@@ -1022,6 +1065,31 @@ porch.rotation.y = Math.atan2(faceOut[0], faceOut[1]);   // local z points out o
 porch.visible = false;
 scene.add(porch);
 buildings.push({ group: porch, delay: .6 });
+
+// ---------- named entrances (photos): grey portal over the hostel doors, college name on the academic block ----------
+{
+  const hostelEast = ringEdges(hostel.outer).find(([[x, y]]) => x === -17.6 && y === -182.1);   // hostel's east face
+  if (hostelEast) {
+    const s = entranceSign(hostel, hostelEast, 'G H RAISONI BOYS HOSTEL', { signW: 12, top: 4.8 });
+    s.visible = false; scene.add(s); buildings.push({ group: s, delay: .66 });
+  }
+  const college = byCorner(-55.6, 162.9);        // colorful E&TC / Computer block; its SE face carries the college name
+  if (college) {
+    const stand = [-5, 112];                     // where the ACM team photographed the main entrance
+    let best = null, bestD = Infinity;
+    for (const edge of ringEdges(college.outer)) {
+      const [[x1, y1], [x2, y2]] = edge, mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+      const { nx, ny, len } = wallFrame(college, edge);
+      const tx = stand[0] - mx, ty = stand[1] - my, d = Math.hypot(tx, ty);
+      if (len < 7 || d < 5 || (tx * nx + ty * ny) / d < .35) continue;   // long enough, and facing the camera
+      if (d < bestD) { bestD = d; best = edge; }
+    }
+    if (best) {
+      const s = entranceSign(college, best, 'G H RAISONI COLLEGE OF ENGINEERING & MANAGEMENT', { signW: 11, signH: 1.6, top: 5.2, proj: 2.2 });
+      s.visible = false; scene.add(s); buildings.push({ group: s, delay: .68 });
+    }
+  }
+}
 
 // ---------- palm trees: along the main building's south side and by the entrance path (photos) ----------
 const palmSpots = [];
