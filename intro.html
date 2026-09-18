@@ -1322,6 +1322,22 @@ buildings.push({ group: porch, delay: .6 });
   }
 }
 
+// the college name on the main building, above the entrance porch, facing the arch gate
+{
+  const [fx, fy] = faceDir, [ox, oy] = faceOut;
+  const back = new THREE.Mesh(new THREE.BoxGeometry(16.4, 2.4, .3), paper);
+  back.position.copy(P(ENTRY[0] + ox * .75, ENTRY[1] + oy * .75, 7.7));   // in front of the fins
+  back.rotation.y = Math.atan2(-fy, fx);
+  const sign = new THREE.Mesh(new THREE.PlaneGeometry(16, 2.06), textSign('G H RAISONI COLLEGE OF ENGINEERING & MANAGEMENT', { fg: '#2f5aa8' }));
+  sign.position.copy(P(ENTRY[0] + ox * .95, ENTRY[1] + oy * .95, 7.7));
+  sign.rotation.y = Math.atan2(-fy, fx) + (ox * -fy + oy * fx < 0 ? Math.PI : 0);   // faces out, text not mirrored
+  const nameplate = new THREE.Group();
+  nameplate.add(back, sign);
+  nameplate.visible = false;
+  scene.add(nameplate);
+  buildings.push({ group: nameplate, delay: .62 });
+}
+
 // ---------- palm trees: along the main building's south side and by the entrance path (photos) ----------
 const palmSpots = [];
 let southPalms = 0;                                                    // palms after this index are the tall ones by the entrance
