@@ -46,10 +46,11 @@
   .tl .status { color:var(--red); }
   .br { bottom:12px; right:16px; text-align:right; pointer-events:auto; }
   .br a { color:#6f6f6f; }
-  .ctrl { position:fixed; top:14px; right:16px; background:transparent; color:#bbb; border:1px solid #444;
-          font:12px 'Roboto Mono', monospace; letter-spacing:.12em; padding:8px 14px; cursor:pointer; }
+  .top-nav { position:fixed; top:14px; right:16px; display:flex; gap:8px; z-index:10; }
+  .ctrl { background:rgba(20,20,20,.75); color:#bbb; border:1px solid #444;
+          font:12px 'Roboto Mono', monospace; letter-spacing:.12em; padding:8px 14px; cursor:pointer;
+          border-radius:4px; backdrop-filter:blur(4px); }
   .ctrl:hover { color:#fff; border-color:#888; }
-  #camBtn { right:136px; }
 
   /* camera picker (temporary tool for choosing the view) */
   [hidden] { display:none !important; }
@@ -85,7 +86,8 @@
     .hero-actions { flex-direction:column; }
     .corner { font-size:10px; }
     .tl { max-width:calc(100% - 130px); }
-    #camBtn { display:none; }
+    .top-nav { top:10px; right:10px; gap:6px; }
+    .ctrl { font-size:11px; padding:6px 10px; }
     .br { bottom:4px; }
   }
 
@@ -194,6 +196,7 @@
   .pill:disabled { opacity:.6; cursor:wait; }
   .form-error { position:relative; color:#ff6b6b; font-size:14px; margin:0; padding:0 24px; min-height:20px; }
   .form-nav { position:relative; display:flex; justify-content:space-between; gap:10px; padding:10px 24px 20px; }
+  .form-nav-right { display:flex; gap:10px; align-items:center; }
   .checklist { list-style:none; padding:0; margin:0 0 16px; }
   .checklist li { display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px solid #222; }
   .checklist li::before { content:'✓'; flex:none; width:22px; height:22px; border-radius:4px; background:var(--red); color:#fff;
@@ -205,48 +208,22 @@
   .agree.bad span { color:#ff6b6b; }
   .crew-id { font:700 44px/1 Oswald, sans-serif; color:var(--red); letter-spacing:.06em; margin:10px 0 16px; }
 
-  /* character box inside the form */
-  .character { margin:0 0 14px; }
-  .character-label { display:block; font:12px 'Roboto Mono', monospace; letter-spacing:.08em; color:#999; margin:0 0 6px; text-transform:uppercase; }
-  .character-box { border:1px dashed #3a3a3a; border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
-  .character-box.has-character { border-style:solid; border-color:#333; background:rgba(218,17,17,.07); }
-  .character-hint { font-size:12px; color:#888; }
-  .character-name { font:700 30px/1 Oswald, sans-serif; }
-  .character-name .r { color:var(--red); }
-  .character-desc { margin:0; font-size:13px; color:#cfcfcf; line-height:1.45; }
-  .quiz-btn { background:var(--red); color:#fff; border:0; border-radius:8px; font:500 14px Oswald, sans-serif; letter-spacing:.1em; padding:10px 16px; cursor:pointer; }
-  .quiz-btn:hover { background:var(--red-dark); }
-  .quiz-btn.ghost { background:transparent; border:1px solid #444; color:#ddd; }
-  .quiz-btn.bad { outline:2px solid var(--red); outline-offset:3px; }
+  /* UPI payment box */
+  .payment-box { background:#161616; border:1px solid #333; border-radius:12px; padding:16px; margin:0 0 16px; }
+  .payment-head { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #282828; padding-bottom:12px; margin-bottom:14px; }
+  .payment-tag { display:block; font:11px 'Roboto Mono', monospace; color:var(--red); letter-spacing:.12em; }
+  .payment-amount { font:700 28px/1 Oswald, sans-serif; color:#fff; margin-top:2px; }
+  .payment-amount small { font-size:14px; color:#888; font-weight:400; }
+  .payment-payee { font-size:12px; color:#aaa; text-align:right; }
+  .payment-payee b { color:#fff; display:block; font-size:13px; margin-top:2px; }
+  .qr-container { text-align:center; padding:12px; background:#0d0d0d; border-radius:10px; border:1px solid #222; margin-bottom:16px; }
+  .qr-code { width:160px; height:160px; border-radius:8px; border:4px solid #fff; background:#fff; display:inline-block; }
+  .qr-hint { font-size:12px; color:#888; margin:8px 0 10px; }
+  .upi-app-btn { display:inline-block; background:#242424; color:#fff; border:1px solid #444; border-radius:6px; font:500 13px Oswald, sans-serif; letter-spacing:.08em; padding:8px 14px; text-decoration:none; margin-bottom:4px; }
+  .upi-app-btn:hover { background:var(--red); border-color:var(--red); }
+  .field-hint { display:block; font-size:11px; color:#777; margin-top:4px; }
 
-  /* character quiz modal */
-  .quiz { position:fixed; inset:0; z-index:9; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(6,6,6,.82); }
-  .quiz-card { position:relative; width:min(560px, 100%); max-height:90vh; overflow:auto; background:#121212; border:1px solid #2a2a2a;
-               border-radius:18px; padding:28px clamp(20px,4vw,36px) 30px; box-shadow:0 24px 70px rgba(0,0,0,.6); }
-  .quiz-close { position:absolute; top:14px; right:14px; width:34px; height:34px; background:none; border:1px solid #444; color:#bbb;
-                border-radius:8px; font:14px 'Roboto Mono', monospace; cursor:pointer; }
-  .quiz-close:hover { color:#fff; border-color:#888; }
-  .quiz-count { font:500 12px 'Roboto Mono', monospace; letter-spacing:.15em; color:var(--red); }
-  .quiz-bar { height:5px; background:#242424; border-radius:3px; margin:8px 0 22px; overflow:hidden; }
-  .quiz-bar span { display:block; height:100%; background:var(--red); transition:width .35s; }
-  .quiz-q { font:700 clamp(22px,3.4vw,30px)/1.15 Oswald, sans-serif; margin:0 0 20px; }
-  .quiz-options { display:flex; flex-direction:column; gap:10px; }
-  .quiz-option { display:flex; gap:14px; align-items:center; text-align:left; background:#0d0d0d; color:#eee; border:1px solid #333;
-                 border-radius:12px; padding:14px 16px; cursor:pointer; font:15px Roboto, sans-serif; transition:border-color .2s, background .2s, transform .1s; }
-  .quiz-option:hover { border-color:var(--red); background:#160c0c; }
-  .quiz-option:active { transform:scale(.99); }
-  .quiz-option b { flex:none; width:30px; height:30px; border-radius:7px; background:#242424; color:#fff; font:700 15px/30px Oswald, sans-serif; text-align:center; }
-  .quiz-option:hover b { background:var(--red); }
-  .quiz-result { text-align:center; }
-  .quiz-name { font:700 clamp(48px,9vw,84px)/.92 Oswald, Impact, sans-serif; margin:6px 0 12px; }
-  .quiz-name .r { color:var(--red); }
-  .quiz-desc { color:#ddd; font-size:16px; line-height:1.5; margin:0 auto 14px; max-width:40ch; }
-  .quiz-swap { color:#ff9b6b; font-size:13px; margin:0 auto 18px; max-width:42ch; }
-  .quiz-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-  @media (max-width:767px) {
-    .quiz-card { padding:24px 16px; }
-    .quiz-name { font-size:56px; }
-  }
+
 
   /* ---------- after sealing: the heist begins (alarm, hot air balloons, the vault, the masked crew) ---------- */
   .recruit, .callouts, .corner.tl { transition:opacity .45s; }
@@ -375,22 +352,17 @@
   18.5731° N · 73.9816° E<br>
   <span class="status" id="status">DRAWING SITE PLAN…</span>
 </div>
-<button class="ctrl" id="ctrl">SKIP ▸</button>
-<button class="ctrl" id="camBtn">SET CAMERA</button>
+<div class="top-nav">
+  <button class="ctrl" id="camBtn">SET CAMERA</button>
+  <button class="ctrl" id="ctrl">SKIP ▸</button>
+</div>
 <div class="campanel" id="campanel" hidden>
   <p><b>1</b> On the map, press where you stood and drag toward what you photographed.</p>
   <button class="ghost" id="gateBtn">GO TO ARCH GATE VIEW</button>
   <button class="ghost" id="futsalBtn">GO TO FOOTBALL TURF VIEW</button>
-  <button class="ghost" id="schoolBtn">GO TO SCHOOL ROOF VIEW</button>
   <button class="ghost" id="hostelBtn">GO TO HOSTEL VIEW</button>
-  <button class="ghost" id="panoBtn">GO TO TURF PANORAMA VIEW</button>
-  <button class="ghost" id="gymBtn">GO TO GYM VIEW</button>
-  <button class="ghost" id="courtyardBtn">GO TO COURTYARD VIEW</button>
-  <button class="ghost" id="colorfulBtn">GO TO COLORFUL BUILDING VIEW</button>
-  <button class="ghost" id="colorfulSideBtn">GO TO COLORFUL SIDE VIEW</button>
-  <button class="ghost" id="oldAerialBtn">GO TO OLD AERIAL VIEW</button>
-  <button class="ghost" id="parkingBtn">GO TO PARKING VIEW</button>
   <button class="ghost" id="basketballBtn">GO TO BASKETBALL COURT VIEW</button>
+  <button class="ghost" id="panoBtn">GO TO TURF PANORAMA VIEW</button>
   <canvas id="minimap"></canvas>
   <p><b>2</b> Move around (hold the buttons):</p>
   <div class="pad">
@@ -401,23 +373,10 @@
     <button data-key="KeyR" style="grid-area:1/4" title="Go up">UP</button>
     <button data-key="KeyF" style="grid-area:2/4" title="Go down">DOWN</button>
   </div>
-  <p class="hint">Keyboard: W A S D = walk · R / F = up / down · hold Shift = faster<br>
-    Drag the 3D view = look around · Scroll on it = walk forward / back</p>
+  <p class="hint">Keyboard: W A S D = walk · R / F = up / down</p>
   <label>Height <span id="heightV"></span><input type="range" id="height" min="1.5" max="400" step="0.5" value="1.5"></label>
   <label>Tilt <span id="tiltV"></span><input type="range" id="tilt" min="-89" max="60" step="1" value="10"></label>
   <label>Zoom <span id="zoomV"></span><input type="range" id="zoom" min="-10" max="90" step="1" value="45"></label>
-  <label>Floors of <span id="floorsName"></span>: <span id="floorsV"></span><input type="range" id="floors" min="1" max="12" step="1" value="6"></label>
-  <p><b>3</b> Put your photo on top to compare. It stays on your laptop.</p>
-  <button class="ghost" id="photoBtn">ADD PHOTO</button>
-  <button class="ghost" id="removePhotoBtn" hidden>REMOVE PHOTO</button>
-  <input type="file" id="photoFile" accept="image/*" hidden>
-  <label id="photoOpL" hidden>See-through <input type="range" id="photoOp" min="0" max="1" step="0.05" value="0.5"></label>
-  <p><b>4</b> Copy this and paste it to Claude:</p>
-  <code id="camview"></code>
-  <button class="btn" id="copyview">COPY VIEW</button>
-  <p class="hint" style="margin-top:10px">Or paste a view line here to jump to it:</p>
-  <input class="paste" id="pasteView" placeholder="PHOTO VIEW stand …">
-  <button class="ghost" id="pasteBtn">GO</button>
 </div>
 <img id="photo" alt="" hidden>
 
@@ -454,16 +413,42 @@
     <section class="step" hidden>
       <div class="kicker">THE COURTYARD <i></i> <span id="crewCount"></span></div>
       <h2>THE <span class="r">MEMBERS</span></h2>
+      <p class="lead" id="membersIntro">Solo participant? Click <b>NEXT ▸</b> to proceed. Or click <b>+ ADD MEMBER</b> to add teammates (max 3 members).</p>
       <div class="bar"><span id="crewBar"></span></div>
       <div id="members"></div>
-      <button type="button" class="pill ghost" id="addMember">+ ADD MEMBER</button>
     </section>
     <section class="step" hidden>
       <div class="kicker">THE PLAN <i></i> LAST CHECK</div>
       <h2>SEAL THE <span class="r">FILE</span></h2>
-      <p class="lead">Check every name. The file can't be changed after sealing.</p>
+      <p class="lead">Check every name & complete payment to seal the file.</p>
       <ul class="checklist" id="summary"></ul>
-      <label class="agree"><input type="checkbox" name="rules" required><span>My crew has read the Professor's rules and agrees to them.</span></label>
+
+      <div class="payment-box">
+        <div class="payment-head">
+          <div>
+            <span class="payment-tag">REGISTRATION FEE</span>
+            <div class="payment-amount">₹49 <small>/ crew</small></div>
+          </div>
+          <div class="payment-payee">Payee: <b>Kumar Aditya Singh</b><span class="field-hint">kumar79adityajee@okicici</span></div>
+        </div>
+        
+        <div class="qr-container">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;data=upi%3A%2F%2Fpay%3Fpa%3Dkumar79adityajee%40okicici%26pn%3DKumar%2520Aditya%2520Singh%26am%3D49%26cu%3DINR" alt="UPI QR Code" class="qr-code">
+          <p class="qr-hint">Scan & Pay via Any UPI App</p>
+          <a href="upi://pay?pa=kumar79adityajee@okicici&amp;pn=Kumar%20Aditya%20Singh&amp;am=49&amp;cu=INR" class="upi-app-btn">PAY ₹49 VIA UPI APP ▸</a>
+        </div>
+
+        <label class="field">
+          <span>12-Digit UTR / Transaction ID</span>
+          <input name="utr" required inputmode="numeric" maxlength="12" pattern="[0-9]{12}" placeholder="e.g. 426189301234" autocomplete="off">
+        </label>
+
+        <label class="field">
+          <span>Payment Screenshot</span>
+          <input type="file" id="utrProof" accept="image/*" required>
+          <small class="field-hint">Upload screenshot of your completed UPI payment</small>
+        </label>
+      </div>
     </section>
     <section class="step" hidden>
       <div class="kicker">FILE SEALED <i></i> <span id="sealedCrew"></span></div>
@@ -477,7 +462,10 @@
   <p class="form-error" id="formError" role="alert"></p>
   <div class="form-nav">
     <button type="button" class="pill ghost" id="backBtn">◂ BACK</button>
-    <button type="submit" class="pill" id="nextBtn">NEXT ▸</button>
+    <div class="form-nav-right">
+      <button type="button" class="pill ghost" id="addMember" hidden>+ ADD MEMBER</button>
+      <button type="submit" class="pill" id="nextBtn">NEXT ▸</button>
+    </div>
   </div>
 </form>
 
@@ -497,12 +485,7 @@
   </div>
 </section>
 
-<section class="quiz" id="quiz" hidden role="dialog" aria-modal="true" aria-label="Money Heist character quiz">
-  <div class="quiz-card">
-    <button class="quiz-close" id="quizClose" type="button" aria-label="Close">✕</button>
-    <div class="quiz-body" id="quizBody"></div>
-  </div>
-</section>
+
 
 <section class="reveal" id="reveal" hidden aria-live="polite">
   <div class="reveal-flash" aria-hidden="true"></div>
@@ -1899,9 +1882,8 @@ ctrl.addEventListener('click', () => {
   t = t < END ? END : 0;
 });
 
-// ---------- camera tool (temporary: walk around, match a real photo, copy the view) ----------
-const camBtn = $('camBtn'), camPanel = $('campanel'), camView = $('camview');
-if (!new URLSearchParams(location.search).has('dev')) camBtn.hidden = true;   // camera tool is for building the model, not for visitors
+// ---------- camera tool (walk around, view angles, 3D explorer) ----------
+const camBtn = $('camBtn'), camPanel = $('campanel');
 const heightIn = $('height'), tiltIn = $('tilt'), zoomIn = $('zoom');
 const DEG = Math.PI / 180;
 zoomIn.value = 45;   // browsers may restore an old slider position on reload
@@ -1972,21 +1954,8 @@ renderer.domElement.addEventListener('wheel', e => {
 
 heightIn.addEventListener('input', () => { view.h = +heightIn.value; });
 tiltIn.addEventListener('input', () => { view.pitch = +tiltIn.value * DEG; });
-// the map's floor counts are often wrong: let the user fix the building they are facing
-const floorsIn = $('floors');
-let floorsTarget = 0;                         // index into DATA.buildings (and buildings)
-floorsIn.addEventListener('input', () => {
-  const b = DATA.buildings[floorsTarget], entry = buildings[floorsTarget];
-  b.levels = +floorsIn.value;
-  scene.remove(entry.group);
-  entry.group.traverse(o => o.geometry?.dispose());
-  entry.group = buildingGroup(b);
-  if (withShadows) castShadows(entry.group);
-  scene.add(entry.group);
-  if (floorsTarget === 0) ring.position.y = b.levels * FLOOR_H + .4;
-});
 
-for (const s of [heightIn, tiltIn, zoomIn, floorsIn, $('photoOp')]) s.addEventListener('change', () => s.blur());
+for (const s of [heightIn, tiltIn, zoomIn]) s.addEventListener('change', () => s.blur());
 
 function placeToolCamera(dt) {
   const held = code => keys.has(code);
@@ -2014,13 +1983,7 @@ function placeToolCamera(dt) {
   camera.updateProjectionMatrix();
 
   view.hit = hitWall(view.x, view.y, dx, dy);
-  if (view.hit && document.activeElement !== floorsIn) floorsTarget = view.hit.bi;
-  floorsIn.value = DATA.buildings[floorsTarget].levels;
-  $('floorsName').textContent = buildingName(floorsTarget);
-  $('floorsV').textContent = DATA.buildings[floorsTarget].levels;
-
   drawMap();
-  camView.textContent = describeView();
 }
 
 // first wall hit by a ray from (px, py) in direction (dx, dy)
@@ -2177,32 +2140,7 @@ map.addEventListener('pointerup', () => {
   view.pitch = hit ? Math.atan2(DATA.buildings[hit.bi].levels * FLOOR_H / 2 - view.h, hit.d) : 0;
 });
 
-// --- the user's photo, laid see-through over the 3D view (never leaves the laptop) ---
-function removePhoto() {
-  if (photoEl.src) URL.revokeObjectURL(photoEl.src);
-  photoEl.removeAttribute('src');
-  photoEl.hidden = true;
-  photoAspect = 0;
-  $('photoOpL').hidden = $('removePhotoBtn').hidden = true;
-  resize();
-}
 
-$('photoBtn').addEventListener('click', () => $('photoFile').click());
-$('removePhotoBtn').addEventListener('click', removePhoto);
-$('photoFile').addEventListener('change', e => {
-  const file = e.target.files[0];
-  e.target.value = '';                     // so picking the same file again still works
-  if (!file) return;
-  removePhoto();
-  photoEl.onload = () => {
-    photoAspect = photoEl.naturalWidth / photoEl.naturalHeight;
-    photoEl.hidden = !tool;
-    $('photoOpL').hidden = $('removePhotoBtn').hidden = false;
-    resize();
-  };
-  photoEl.style.opacity = $('photoOp').value;
-  photoEl.src = URL.createObjectURL(file);
-});
 
 // jump to a copied "PHOTO VIEW ..." line
 function goToViewLine(text) {
@@ -2216,158 +2154,35 @@ function goToViewLine(text) {
   if (fov !== undefined) zoomIn.value = 100 - fov;
   return true;
 }
-$('pasteBtn').addEventListener('click', () => {
-  if (!goToViewLine($('pasteView').value)) $('pasteView').value = 'Could not read that line';
-});
-// the hostel view the ACM team matched with the camera tool
-$('hostelBtn').addEventListener('click', () =>
-  goToViewLine('PHOTO VIEW stand 9 -100 · facing north-west (324°) · height 1.5 m · tilt 7° · fov 17'));
-
-$('panoBtn').addEventListener('click', () =>
-  goToViewLine('PHOTO VIEW stand 65 60 · facing north-west (304°) · height 19.7 m · tilt -7° · fov 50'));
-
-$('gymBtn').addEventListener('click', () =>
-  goToViewLine('PHOTO VIEW stand -4 -109 · facing west (287°) · height 1.5 m · tilt 5° · fov 50'));
-
-$('courtyardBtn').addEventListener('click', () =>
-  goToViewLine('PHOTO VIEW stand 15 -42 · facing west (288°) · height 16.0 m · tilt -10° · fov 50'));
-
-$('colorfulBtn').addEventListener('click', () =>
-  goToViewLine('PHOTO VIEW stand 25 25 · facing south-west (209°) · height 2.5 m · tilt 7° · fov 50'));
-
-$('colorfulSideBtn').addEventListener('click', () =>
-  goToViewLine('PHOTO VIEW stand 14 61 · facing south-west (237°) · height 2.5 m · tilt 16° · fov 50'));
-
-$('oldAerialBtn').addEventListener('click', () =>
-  goToViewLine('PHOTO VIEW stand 94 -76 · facing south-west (238°) · height 21.9 m · tilt -11° · fov 50'));
-
-$('parkingBtn').addEventListener('click', () =>
-  goToViewLine('PHOTO VIEW stand 58 -112 · facing north-west (325°) · height 24 m · tilt -38° · fov 60'));
-
-// on the court, with the near hoop behind the camera (its shadow is in the court photo)
-$('basketballBtn').addEventListener('click', () =>
-  goToViewLine('PHOTO VIEW stand 53 -82 · facing north (24°) · height 1.7 m · tilt 4° · fov 70'));
-
-$('schoolBtn').addEventListener('click', () => {
-  // lane photo: from the south edge of the school roof, zoomed far in, looking down the
-  // lane that runs past the long stepped building (probably the colorful one with the banner)
-  const school = DATA.buildings.find(b => b.name === 'G H Raisoni School');
-  Object.assign(view, { x: 62, y: -105, h: school.levels * FLOOR_H + 1.5,     // just past the roof edge
-                        yaw: Math.atan2(110 + 105, -10 - 62), pitch: -3.5 * DEG });
-  zoomIn.value = 83;
-});
-
-// matched by the ACM team from the futsal photo with students
-$('futsalBtn').addEventListener('click', () =>
-  goToViewLine('PHOTO VIEW stand -28 16 · facing north (9°) · height 1.6 m · tilt 1° · fov 50'));
-
+// preset views
 $('gateBtn').addEventListener('click', () => {
-  // measured from the pov photo (6-floor building): arch top ~16° and building top ~19°
-  // above eye level, so it was taken ~20 m outside the arch, phone tilted up ~15°
   const [x, y] = alongFace(60);
   Object.assign(view, { x, y, h: 1.5, yaw: Math.atan2(-faceOut[1], -faceOut[0]), pitch: 15 * DEG });
   zoomIn.value = 21;
 });
-$('photoOp').addEventListener('input', e => { photoEl.style.opacity = e.target.value; });
 
-function describeView() {
-  const r = Math.round, bearing = bearingOf(Math.cos(view.yaw), Math.sin(view.yaw));
-  return `PHOTO VIEW stand ${r(view.x)} ${r(view.y)} · facing ${compass(bearing)} (${bearing}°)`
-       + ` · height ${view.h.toFixed(1)} m · tilt ${r(view.pitch / DEG)}° · fov ${r(camera.fov)}`
-       + (view.hit ? ` · wall: ${wallText(view.hit)} (${DATA.buildings[view.hit.bi].levels} floor${DATA.buildings[view.hit.bi].levels === 1 ? '' : 's'})` : '');
-}
+$('futsalBtn').addEventListener('click', () =>
+  goToViewLine('PHOTO VIEW stand -28 16 · facing north (9°) · height 1.6 m · tilt 1° · fov 50'));
 
-document.getElementById('copyview').addEventListener('click', async e => {
-  const btn = e.currentTarget;
-  try {
-    await navigator.clipboard.writeText(camView.textContent);
-    btn.textContent = 'COPIED ✓';
-  } catch {
-    getSelection().selectAllChildren(camView);
-    btn.textContent = 'PRESS CTRL+C';
-  }
-  setTimeout(() => { btn.textContent = 'COPY VIEW'; }, 1500);
-});
+$('hostelBtn').addEventListener('click', () =>
+  goToViewLine('PHOTO VIEW stand 9 -100 · facing north-west (324°) · height 1.5 m · tilt 7° · fov 17'));
+
+$('basketballBtn').addEventListener('click', () =>
+  goToViewLine('PHOTO VIEW stand 53 -82 · facing north (24°) · height 1.7 m · tilt 4° · fov 70'));
+
+$('panoBtn').addEventListener('click', () =>
+  goToViewLine('PHOTO VIEW stand 65 60 · facing north-west (304°) · height 19.7 m · tilt -7° · fov 50'));
 
 // ---------- recruitment form: each step has its own campus scene, and the camera flies between them ----------
-const CREW_MIN = 2, CREW_MAX = 4;                 // TODO(ACM): confirm crew size
-const REGISTRATION_ENDPOINT = '';
+const CREW_MIN = 1, CREW_MAX = 4;                 // 1 leader + up to 3 members = max 4
+const REGISTRATION_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwuk661BYQ6zNfbmPEfDOaZ0w7tWJKiQ1VREOICYhlRXLqtzXl02p9oxbeyv5mU8yMI6Q/exec';
 const DEV_MODE = new URLSearchParams(location.search).has('dev');   // ?dev = someone testing: no validation, pre-filled crew, nothing sent                 // TODO(ACM): URL that stores registrations (e.g. a Google Apps Script web app)
 const BRANCHES = ['Computer Engineering', 'Computer Science & Engineering', 'Information Technology', 'AI & Data Science',
                   'AI & Machine Learning', 'Electronics & Telecommunication', 'Electrical Engineering', 'Mechanical Engineering',
                   'Civil Engineering', 'MBA', 'MCA', 'Other'];
 const YEARS = ['First year', 'Second year', 'Third year', 'Final year', 'Postgraduate'];
-// Money Heist identities the quiz can hand out (The Professor is reserved for the ACM leads).
-// One per person -- no repeats inside a crew. Descriptions are spoiler-free.
-const CHARACTERS = {
-  TOKYO:     'Runs on instinct and never backs down: first to the fire, last to quit.',
-  BERLIN:    'Elegant, magnetic, sure of the plan. Born to command a room.',
-  NAIROBI:   'The heart of the crew: lifts everyone up and keeps standards high.',
-  RIO:       'The tech brain. Hand this one a laptop and the cameras go dark.',
-  DENVER:    'Loud laugh, bigger heart, loyal to the end whatever the odds.',
-  MOSCOW:    'Calm, patient and fatherly. Digs in and keeps the crew steady.',
-  HELSINKI:  'The gentle giant: quiet strength you want standing beside you.',
-  LISBON:    'Reads people and pressure fast. Sharp negotiator, sharper mind.',
-  STOCKHOLM: 'Adapts in seconds and surprises everyone when it counts.',
-  PALERMO:   'Brilliant engineer with a flair for the dramatic, impossible plan.',
-  'BOGOTÁ':  'The fixer and welder: steady hands that hold the whole job together.',
-  MARSEILLE: 'Quiet and disciplined. Says little, misses nothing.',
-  MANILA:    'Undercover and watchful: blends in and sees what others miss.',
-};
-const CODENAMES = Object.keys(CHARACTERS);
-// 6 questions, four options each; every option nudges a few characters.
-const QUIZ = [
-  { q: 'The alarm blares in the middle of the heist. You...',
-    options: [
-      { label: 'Fall back on the backup plan you already made.', weights: { BERLIN: 2, PALERMO: 2, LISBON: 1 } },
-      { label: 'Run straight toward the trouble.',               weights: { TOKYO: 3, DENVER: 1, MARSEILLE: 1 } },
-      { label: 'Calm everyone down and hold the line.',          weights: { NAIROBI: 2, MOSCOW: 2, HELSINKI: 1, STOCKHOLM: 1 } },
-      { label: 'Kill the cameras before anyone reacts.',         weights: { RIO: 3, MANILA: 1 } },
-    ] },
-  { q: 'In a college group project, you are the one who...',
-    options: [
-      { label: 'Presents it to the professor.',            weights: { BERLIN: 2, LISBON: 2 } },
-      { label: 'Builds the tech part at 3 AM.',            weights: { RIO: 2, BOGOTÁ: 1, PALERMO: 1 } },
-      { label: 'Keeps the whole group together.',          weights: { NAIROBI: 2, DENVER: 1, STOCKHOLM: 1, MOSCOW: 1 } },
-      { label: 'Quietly finishes their part and more.',    weights: { HELSINKI: 2, MARSEILLE: 2, MANILA: 1 } },
-    ] },
-  { q: 'Pick one tool for the heist.',
-    options: [
-      { label: 'A laptop.',        weights: { RIO: 2, PALERMO: 1, LISBON: 1 } },
-      { label: 'A welding torch.', weights: { BOGOTÁ: 3, MOSCOW: 1 } },
-      { label: 'A megaphone.',     weights: { NAIROBI: 2, DENVER: 1, BERLIN: 1 } },
-      { label: 'A disguise kit.',  weights: { MANILA: 3, STOCKHOLM: 1, TOKYO: 1 } },
-    ] },
-  { q: 'Everything goes wrong. What now?',
-    options: [
-      { label: 'Improvise on the spot.',         weights: { TOKYO: 2, STOCKHOLM: 2 } },
-      { label: 'Stay disciplined, stick to it.', weights: { MARSEILLE: 2, LISBON: 1, HELSINKI: 1, MOSCOW: 1 } },
-      { label: 'Go bigger and bolder.',          weights: { PALERMO: 2, BERLIN: 1 } },
-      { label: 'Laugh it off and push on.',      weights: { DENVER: 3, NAIROBI: 1 } },
-    ] },
-  { q: 'Your friends would call you...',
-    options: [
-      { label: 'Fearless.', weights: { TOKYO: 2, MARSEILLE: 1, BOGOTÁ: 1 } },
-      { label: 'Loyal.',    weights: { HELSINKI: 2, MOSCOW: 2, DENVER: 1 } },
-      { label: 'Sharp.',    weights: { LISBON: 2, RIO: 1, PALERMO: 1, MANILA: 1 } },
-      { label: 'Stylish.',  weights: { BERLIN: 3, NAIROBI: 1 } },
-    ] },
-  { q: 'During the heist, where would you rather be?',
-    options: [
-      { label: 'In the control room.',        weights: { RIO: 2, LISBON: 1 } },
-      { label: 'In the vault with the gold.', weights: { NAIROBI: 1, BOGOTÁ: 2, PALERMO: 1, TOKYO: 1 } },
-      { label: 'With the hostages.',          weights: { STOCKHOLM: 2, MANILA: 2, MOSCOW: 1 } },
-      { label: 'On the front line.',          weights: { DENVER: 1, HELSINKI: 2, MARSEILLE: 2, BERLIN: 1 } },
-    ] },
-];
-// score the answers, then rank characters (ties broken by a stable hash so it feels decided, not random)
-function strHash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
-function rankCharacters(answers, seed) {
-  const score = Object.fromEntries(CODENAMES.map(c => [c, 0]));
-  answers.forEach((k, qi) => { const w = QUIZ[qi]?.options[k]?.weights || {}; for (const c in w) score[c] += w[c]; });
-  const h = strHash(seed);
-  return CODENAMES.slice().sort((a, b) => (score[b] - score[a]) || (((strHash(b) ^ h) >>> 0) - ((strHash(a) ^ h) >>> 0)));
-}
+
+
 const SCENE_NAMES = ['SCENE 01 · THE GATE', 'SCENE 02 · THE ENTRANCE', 'SCENE 03 · THE COURTYARD', 'SCENE 04 · OVER THE TURF', 'SCENE 05 · TARGET LOCKED'];
 
 // one camera shot per step, in the same terms as the camera tool's view lines
@@ -2471,18 +2286,14 @@ function personFields(prefix, leader) {
       <label class="field"><span>Year</span><select name="${prefix}Year" required>${optionList(YEARS, 'Choose…')}</select></label>
     </div>
     <label class="field"><span>Phone (WhatsApp)</span><input name="${prefix}Phone" required inputmode="numeric" maxlength="10" pattern="[6-9][0-9]{9}" autocomplete="${leader ? 'tel-national' : 'off'}"></label>
-    ${leader ? '<label class="field"><span>Email</span><input name="leadEmail" type="email" required autocomplete="email"></label>' : ''}
-    <div class="character" data-prefix="${prefix}">
-      <input type="hidden" name="${prefix}Code">
-      <span class="character-label">Money Heist identity</span>
-      <div class="character-box"></div>
-    </div>`;
+    ${leader ? '<label class="field"><span>Email</span><input name="leadEmail" type="email" required autocomplete="email"></label>' : ''}`;
 }
 
 $('leaderFields').innerHTML = personFields('lead', true);
 $('crewRange').textContent = `${CREW_MIN}–${CREW_MAX}`;
 
 function addMember(id = nextMemberId) {
+  if (1 + memberIds.length >= CREW_MAX) return null;
   nextMemberId = Math.max(nextMemberId, id + 1);
   const card = document.createElement('div');
   card.className = 'member';
@@ -2499,35 +2310,25 @@ function addMember(id = nextMemberId) {
   return card;
 }
 $('addMember').addEventListener('click', () => {
-  addMember().querySelector('input').focus();
-  saveDraft();
+  const card = addMember();
+  if (card) {
+    card.querySelector('input').focus();
+    saveDraft();
+  }
 });
 
 function refreshCrew() {
   const count = 1 + memberIds.length;
   $('crewCount').textContent = `CREW ${count} / ${CREW_MAX}`;
   $('crewBar').style.width = `${count / CREW_MAX * 100}%`;
-  $('addMember').hidden = count >= CREW_MAX;
+  $('addMember').hidden = (recruitStep !== 2) || (count >= CREW_MAX);
   form.querySelectorAll('.member').forEach((card, i) => {
-    card.querySelector('h3').innerHTML = splitName(card.querySelector('input[name$="Code"]').value || '???');
+    card.querySelector('h3').textContent = form.elements['m' + memberIds[i] + 'Name']?.value.trim().toUpperCase() || '???';
     card.querySelector('small').textContent = `MEMBER ${i + 2}`;
-    card.querySelector('.remove').hidden = count <= CREW_MIN;
+    card.querySelector('.remove').hidden = false;
   });
-  $('leaderTitle').innerHTML = splitName(form.elements.leadCode.value || '???');
+  $('leaderTitle').textContent = form.elements.leadName?.value.trim().toUpperCase() || '???';
   $('leaderKicker').textContent = form.elements.leadName.value.trim().toUpperCase() || 'NAME NOT GIVEN YET';
-  form.querySelectorAll('.character').forEach(renderCharacterBox);
-}
-// draw a character box: the TAKE THE QUIZ button, or the assigned identity + RETAKE
-function renderCharacterBox(character) {
-  const prefix = character.dataset.prefix, code = form.elements[prefix + 'Code'].value;
-  const box = character.querySelector('.character-box');
-  box.classList.toggle('has-character', !!code);
-  box.innerHTML = code
-    ? `<div class="character-name">${splitName(code)}</div>
-       <p class="character-desc">${escapeHtml(CHARACTERS[code] || '')}</p>
-       <button type="button" class="quiz-btn ghost" data-prefix="${prefix}">RETAKE QUIZ</button>`
-    : `<button type="button" class="quiz-btn" data-prefix="${prefix}">TAKE THE QUIZ ▸</button>
-       <span class="character-hint">Answer 6 quick questions to get your identity.</span>`;
 }
 
 function saveDraft() {
@@ -2539,8 +2340,9 @@ function saveDraft() {
 function loadDraft() {
   let draft = null;
   try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY)); } catch {}
-  for (const id of draft?.memberIds || []) addMember(id);
-  while (1 + memberIds.length < CREW_MIN) addMember();
+  for (const id of draft?.memberIds || []) {
+    if (1 + memberIds.length < CREW_MAX) addMember(id);
+  }
   for (const [name, value] of Object.entries(draft?.values || {})) if (form.elements[name]) form.elements[name].value = value;
   refreshCrew();
 }
@@ -2559,8 +2361,10 @@ form.addEventListener('input', e => {
 function problemWith(el) {
   const label = el.closest('label')?.querySelector('span')?.textContent || 'This field';
   if (el.type === 'checkbox') return 'Your crew must accept the rules to seal the file.';
+  if (el.name === 'utr') return 'Please enter the 12-digit UPI UTR / Transaction ID.';
+  if (el.id === 'utrProof') return 'Please upload your payment screenshot.';
   if (el.validity.valueMissing) return `${label} is missing.`;
-  if (el.name.endsWith('Phone')) return 'Phone must be a 10-digit mobile number.';
+  if (el.name?.endsWith('Phone')) return 'Phone must be a 10-digit mobile number.';
   if (el.type === 'email') return "That email doesn't look right.";
   if (el.validity.tooShort) return `${label} is too short.`;
   return `${label} doesn't look right.`;
@@ -2578,16 +2382,9 @@ function checkStep(i) {
       return problemWith(el);
     }
   }
-  for (const hidden of steps[i].querySelectorAll('input[name$="Code"]')) {
-    if (!hidden.value) {
-      const btn = hidden.closest('.character')?.querySelector('.quiz-btn');
-      if (btn) { btn.classList.add('bad'); btn.scrollIntoView({ block: 'center', behavior: 'smooth' }); btn.focus?.(); }
-      return 'Take the character quiz to get a Money Heist identity.';
-    }
-  }
   if (i === 2) {
     if (1 + memberIds.length < CREW_MIN) return `A crew needs at least ${CREW_MIN} people.`;
-    for (const [suffix, message] of [['Phone', 'Two people in the crew have the same phone number.'], ['Code', 'Two people in the crew have the same codename.']]) {
+    for (const [suffix, message] of [['Phone', 'Two people in the crew have the same phone number.']]) {
       const seen = new Set();
       for (const el of form.querySelectorAll(`[name$="${suffix}"]`)) {
         if (seen.has(el.value)) { el.classList.add('bad'); el.focus(); return message; }
@@ -2600,7 +2397,7 @@ function checkStep(i) {
 
 function readPerson(prefix) {
   const value = key => form.elements[prefix + key].value.trim();
-  return { name: value('Name'), branch: value('Branch'), year: value('Year'), phone: value('Phone'), codename: value('Code') };
+  return { name: value('Name'), branch: value('Branch'), year: value('Year'), phone: value('Phone') };
 }
 function readCrew() {
   return {
@@ -2611,13 +2408,35 @@ function readCrew() {
   };
 }
 const crewList = data => [data.leader, ...data.members].map((person, i) => `
-  <li><div><b>${escapeHtml(person.codename)} · ${escapeHtml(person.name)}</b>
-  <small>${i ? 'Member' : 'Leader'} · ${escapeHtml(person.branch)} · ${escapeHtml(person.year)} · ${escapeHtml(person.phone)}</small>
-  ${CHARACTERS[person.codename] ? `<small class="trait">${escapeHtml(CHARACTERS[person.codename])}</small>` : ''}</div></li>`).join('');
+  <li><div><b>${escapeHtml(person.name)}</b>
+  <small>${i ? 'Member' : 'Leader'} · ${escapeHtml(person.branch)} · ${escapeHtml(person.year)} · ${escapeHtml(person.phone)}</small></div></li>`).join('');
+
+function getScreenshotData() {
+  const fileInput = $('utrProof');
+  const file = fileInput?.files?.[0];
+  if (!file) return Promise.resolve(null);
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target.result.split(',')[1];
+      resolve({ base64: base64, mimeType: file.type || 'image/png' });
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
 
 async function submitRegistration(data) {
   if (REGISTRATION_ENDPOINT && !DEV_MODE) {          // test runs never reach the real sheet
-    await fetch(REGISTRATION_ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) });
+    const res = await fetch(REGISTRATION_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(data)
+    });
+    const json = await res.json();
+    if (json && json.result === 'error') {
+      throw new Error(json.message || 'Registration failed.');
+    }
   } else {
     console.warn('REGISTRATION_ENDPOINT is empty: this registration is only kept in this browser.');
   }
@@ -2626,7 +2445,7 @@ async function submitRegistration(data) {
 
 function stepCallouts(i) {
   const data = readCrew(), crew = [data.leader, ...data.members];
-  const who = person => [person.codename, person.name].filter(Boolean).join(' · ') || '— — —';
+  const who = person => person.name || '— — —';
   if (i === 0) return [{ at: P(...GATE, 7.4), small: 'MAIN GATE · YOUR CREW', big: data.crew || '— — —' }];
   if (i === 1) return [{ at: P(...alongFace(7.2), 6.2), small: 'CREW LEADER', big: who(data.leader) }];
   if (i === 2) {
@@ -2638,7 +2457,7 @@ function stepCallouts(i) {
     });
   }
   if (i === 3) return [
-    { at: P(...centroid(FUTSAL), 6), small: `CREW OF ${crew.length}`, big: data.crew },
+    { at: P(...centroid(FUTSAL), 6), small: crew.length === 1 ? 'SOLO CREW' : `CREW OF ${crew.length}`, big: data.crew },
     { at: P(mx, my, 24), small: 'TARGET', big: 'MAIN BUILDING' },
   ];
   return [
@@ -2655,29 +2474,32 @@ function showStep(i) {
     tab.classList.toggle('done', k < i);
   });
   backBtn.hidden = i === 4;
+  $('addMember').hidden = (i !== 2) || (1 + memberIds.length >= CREW_MAX);
   nextBtn.textContent = ['NEXT ▸', 'NEXT ▸', 'NEXT ▸', 'SEAL THE FILE ▸', 'BACK TO CAMPUS'][i];
   formError.textContent = '';
   if (i === 3) {
     const data = readCrew();
-    $('summary').innerHTML = `<li><div><b>CREW · ${escapeHtml(data.crew)}</b><small>${escapeHtml(data.college)} · ${1 + data.members.length} people</small></div></li>${crewList(data)}`;
+    const countText = data.members.length === 0 ? 'Solo participant' : `${1 + data.members.length} people`;
+    $('summary').innerHTML = `<li><div><b>CREW · ${escapeHtml(data.crew)}</b><small>${escapeHtml(data.college)} · ${countText}</small></div></li>${crewList(data)}`;
   }
   $('recruitBody').scrollTop = 0;
   flyTo(SHOTS[i]);
   setCallouts(stepCallouts(i));
 }
 
-// ?dev: a ready-made crew (codenames already assigned; RETAKE QUIZ still works)
+// ?dev: a ready-made crew
 function devPrefill() {
   const f = form.elements;
   if (f.crew.value) return;
   f.crew.value = 'Dev Test Crew';
   f.leadName.value = 'Test Leader'; f.leadBranch.value = BRANCHES[0]; f.leadYear.value = YEARS[3];
-  f.leadPhone.value = '9000000001'; f.leadEmail.value = 'test@example.com'; f.leadCode.value = 'TOKYO';
+  f.leadPhone.value = '9000000001'; f.leadEmail.value = 'test@example.com';
   memberIds.forEach((id, k) => {
     f[`m${id}Name`].value = `Test Member ${k + 1}`; f[`m${id}Branch`].value = BRANCHES[2]; f[`m${id}Year`].value = YEARS[1];
-    f[`m${id}Phone`].value = `900000000${k + 2}`; f[`m${id}Code`].value = ['RIO', 'NAIROBI', 'DENVER'][k] || '';
+    f[`m${id}Phone`].value = `900000000${k + 2}`;
   });
-  f.rules.checked = true;
+  if (f.utr) f.utr.value = '123456789012';
+  if (f.rules) f.rules.checked = true;
   refreshCrew();
 }
 
@@ -2691,6 +2513,7 @@ function openRecruit() {
 }
 
 function closeRecruit() {
+  stopHeistAudio();
   document.body.classList.remove('recruiting', 'heist');
   form.hidden = true;
   recruitStep = -1;
@@ -2718,6 +2541,7 @@ form.addEventListener('submit', async e => {
   e.preventDefault();
   if (document.body.classList.contains('revealing')) return;          // the heist is playing: never register twice
   if (recruitStep === 4) {
+    stopHeistAudio();
     resetRecruit();
     closeRecruit();
     return;
@@ -2736,93 +2560,28 @@ form.addEventListener('submit', async e => {
   nextBtn.disabled = true;                        // no double registrations from a double click
   nextBtn.textContent = 'SEALING…';
   try {
-    const data = { ...readCrew(), crewId: 'HEIST-' + Math.random().toString(36).slice(2, 6).toUpperCase(), sealedAt: new Date().toISOString() };
+    const screenshot = await getScreenshotData();
+    const data = {
+      ...readCrew(),
+      utr: form.elements.utr?.value.trim() || '',
+      screenshot: screenshot,
+      crewId: 'HEIST-' + Math.random().toString(36).slice(2, 6).toUpperCase(),
+      sealedAt: new Date().toISOString()
+    };
     await submitRegistration(data);
     $('crewId').textContent = data.crewId;
     $('sealedCrew').textContent = data.crew.toUpperCase();
     $('sealedList').innerHTML = crewList(data);
     try { localStorage.removeItem(DRAFT_KEY); } catch {}
     try { startHeist(data); } catch (err) { console.error(err); showStep(4); moneyRain(); }   // the heist begins, then the sealed file
-  } catch {
-    formError.textContent = "Couldn't send your file. Check your internet and try again.";
+  } catch (err) {
+    formError.textContent = err.message || "Couldn't send your file. Check your internet and try again.";
     nextBtn.textContent = 'SEAL THE FILE ▸';
   } finally {
     nextBtn.disabled = false;
   }
 });
 
-// ---------- character quiz: pick an identity, no repeats within a crew ----------
-const quizEl = $('quiz'), quizBody = $('quizBody');
-let quizPrefix = null, quizAnswers = [], quizResult = null;
-function openQuiz(prefix) {
-  quizPrefix = prefix; quizAnswers = []; quizResult = null;
-  quizEl.hidden = false;
-  document.body.classList.add('quizzing');
-  renderQuiz();
-}
-function closeQuiz() {
-  quizEl.hidden = true;
-  document.body.classList.remove('quizzing');
-  quizPrefix = null;
-}
-function renderQuiz() {
-  const i = quizAnswers.length;
-  if (i < QUIZ.length) {
-    const q = QUIZ[i];
-    quizBody.innerHTML = `
-      <div class="quiz-top">
-        <span class="quiz-count">QUESTION ${i + 1} / ${QUIZ.length}</span>
-        <div class="quiz-bar"><span style="width:${Math.round(i / QUIZ.length * 100)}%"></span></div>
-      </div>
-      <h3 class="quiz-q">${escapeHtml(q.q)}</h3>
-      <div class="quiz-options">${q.options.map((o, k) =>
-        `<button type="button" class="quiz-option" data-k="${k}"><b>${'ABCD'[k]}</b><span>${escapeHtml(o.label)}</span></button>`).join('')}</div>`;
-  } else {
-    const taken = new Set([...form.querySelectorAll('input[name$="Code"]')]
-      .filter(el => el.name !== quizPrefix + 'Code' && el.value).map(el => el.value));
-    const name = form.elements[quizPrefix + 'Name']?.value.trim() || '';
-    const ranked = rankCharacters(quizAnswers, quizPrefix + '|' + name);
-    const top = ranked[0];
-    quizResult = ranked.find(c => !taken.has(c)) || top;
-    const stolen = quizResult !== top && taken.has(top);
-    quizBody.innerHTML = `
-      <div class="quiz-result">
-        <span class="quiz-count">YOUR IDENTITY</span>
-        <div class="quiz-name">${splitName(quizResult)}</div>
-        <p class="quiz-desc">${escapeHtml(CHARACTERS[quizResult])}</p>
-        ${stolen ? `<p class="quiz-swap">Your closest match, ${escapeHtml(top)}, is already taken in your crew — this is your next best fit.</p>` : ''}
-        <div class="quiz-actions">
-          <button type="button" class="pill ghost" id="quizRetake">RETAKE</button>
-          <button type="button" class="pill" id="quizAccept">I AM ${escapeHtml(quizResult)} ▸</button>
-        </div>
-      </div>`;
-  }
-}
-quizBody.addEventListener('click', e => {
-  const opt = e.target.closest('.quiz-option');
-  if (opt) { quizAnswers.push(+opt.dataset.k); renderQuiz(); return; }
-  if (e.target.closest('#quizRetake')) { quizAnswers = []; quizResult = null; renderQuiz(); return; }
-  if (e.target.closest('#quizAccept')) acceptCharacter();
-});
-function acceptCharacter() {
-  const input = form.elements[quizPrefix + 'Code'], character = input?.closest('.character');
-  if (input && quizResult) {
-    input.value = quizResult;
-    refreshCrew();
-    saveDraft();
-    if (recruitStep >= 0) setCallouts(stepCallouts(recruitStep));
-    const box = character?.querySelector('.character-box');
-    if (box) burstFrom(box);
-  }
-  closeQuiz();
-}
-$('quizClose').addEventListener('click', closeQuiz);
-quizEl.addEventListener('click', e => { if (e.target === quizEl) closeQuiz(); });
-addEventListener('keydown', e => { if (e.key === 'Escape' && !quizEl.hidden) closeQuiz(); });
-form.addEventListener('click', e => {
-  const btn = e.target.closest('.quiz-btn');
-  if (btn) { e.preventDefault(); openQuiz(btn.dataset.prefix); }
-});
 
 // share the sealed file with the rest of the crew
 $('shareBtn').addEventListener('click', async () => {
@@ -3004,8 +2763,37 @@ if (withShadows) {
 // the crew lines up in red jumpsuits and Dalí masks, firing money guns → the sealed file.
 // Everything here is drawn by us: no show footage, logos, photos or music.
 
+const HEIST_AUDIO_SRC = 'audio/heist.mp3';           // Change this path if your audio file is located elsewhere (e.g., 'audio/heist.mp3' or a URL)
+let customAudio = null, isAudioPlaying = false;
+
+function playHeistAudio() {
+  if (!sfx.on) return;
+  if (isAudioPlaying) return;
+  isAudioPlaying = true;
+  if (!customAudio) {
+    customAudio = new Audio(HEIST_AUDIO_SRC);
+    customAudio.loop = true;
+  }
+  customAudio.currentTime = 0;
+  const p = customAudio.play();
+  if (p !== undefined) {
+    p.catch(() => {
+      sfx.startLoopingSiren();
+    });
+  }
+}
+
+function stopHeistAudio() {
+  isAudioPlaying = false;
+  if (customAudio) {
+    try { customAudio.pause(); customAudio.currentTime = 0; } catch {}
+  }
+  sfx.stopLoopingSiren();
+}
+
 const sfx = (() => {                                // a tiny synth: the alarm and the money-gun pops (no audio files)
   let ctx = null, master = null, on = true;
+  let sirenOsc = null, sirenGain = null, sirenInterval = null;
   try { on = localStorage.getItem('heist-sound') !== 'off'; } catch {}
   function unlock() {
     try {
@@ -3019,26 +2807,46 @@ const sfx = (() => {                                // a tiny synth: the alarm a
     } catch { ctx = null; }
     return ctx;
   }
-  function siren(seconds) {
+  function startLoopingSiren() {
+    stopLoopingSiren();
     const c = unlock();
     if (!c || !on) return;
-    const t0 = c.currentTime, osc = c.createOscillator(), lp = c.createBiquadFilter(), g = c.createGain();
-    osc.type = 'sawtooth';
-    lp.type = 'lowpass';
-    lp.frequency.value = 1600;
-    for (let k = 0; k * .66 < seconds; k++) {          // two-tone wail
-      const at = t0 + k * .66;
-      osc.frequency.setValueAtTime(600, at);
-      osc.frequency.linearRampToValueAtTime(920, at + .33);
-      osc.frequency.linearRampToValueAtTime(600, at + .66);
+    try {
+      sirenOsc = c.createOscillator();
+      const lp = c.createBiquadFilter();
+      sirenGain = c.createGain();
+      sirenOsc.type = 'sawtooth';
+      lp.type = 'lowpass';
+      lp.frequency.value = 1600;
+      const t0 = c.currentTime;
+      sirenGain.gain.setValueAtTime(0, t0);
+      sirenGain.gain.linearRampToValueAtTime(.12, t0 + .1);
+      const cycle = () => {
+        if (!sirenOsc || !c) return;
+        const now = c.currentTime;
+        sirenOsc.frequency.setValueAtTime(600, now);
+        sirenOsc.frequency.linearRampToValueAtTime(920, now + .33);
+        sirenOsc.frequency.linearRampToValueAtTime(600, now + .66);
+      };
+      cycle();
+      sirenInterval = setInterval(cycle, 660);
+      sirenOsc.connect(lp).connect(sirenGain).connect(master);
+      sirenOsc.start(t0);
+    } catch {}
+  }
+  function stopLoopingSiren() {
+    if (sirenInterval) { clearInterval(sirenInterval); sirenInterval = null; }
+    if (sirenOsc) {
+      try {
+        if (sirenGain && ctx) sirenGain.gain.linearRampToValueAtTime(0, ctx.currentTime + .1);
+        setTimeout(() => {
+          if (sirenOsc) { try { sirenOsc.stop(); sirenOsc.disconnect(); } catch {} sirenOsc = null; }
+        }, 120);
+      } catch { sirenOsc = null; }
     }
-    g.gain.setValueAtTime(0, t0);
-    g.gain.linearRampToValueAtTime(.13, t0 + .06);
-    g.gain.setValueAtTime(.13, t0 + seconds - .35);
-    g.gain.linearRampToValueAtTime(0, t0 + seconds);
-    osc.connect(lp).connect(g).connect(master);
-    osc.start(t0);
-    osc.stop(t0 + seconds + .05);
+  }
+  function siren(seconds) {
+    playHeistAudio();
   }
   function pop() {
     const c = unlock();
@@ -3071,7 +2879,7 @@ const sfx = (() => {                                // a tiny synth: the alarm a
     osc.stop(t0 + .3);
   }
   return {
-    unlock, siren, pop, horn,
+    unlock, siren, pop, horn, startLoopingSiren, stopLoopingSiren,
     get on() { return on; },
     set on(v) {
       on = v;
@@ -3259,9 +3067,10 @@ const heistV = new THREE.Vector3(), screenV = new THREE.Vector3();
 
 function member(person, data, cls = '', h = 1) {
   const lead = person === data.leader;
+  const firstName = (person.name || '???').split(/\s+/)[0].toUpperCase();
   return `<figure class="member-fig${lead ? ' lead' : ''}${cls}" style="--h:${h}">
       ${figureSVG(lead)}
-      <figcaption><b>${splitName(person.codename || '???')}</b><small>${lead ? 'Leader' : 'Crew'} · ${escapeHtml(person.name.split(/\s+/)[0])}</small></figcaption>
+      <figcaption><b>${splitName(firstName)}</b><small>${lead ? 'Leader' : 'Crew'}</small></figcaption>
     </figure>`;
 }
 function crewFigures(data) {                        // the crew on the top step, split left and right around the leader
@@ -3346,7 +3155,7 @@ function startHeist(data) {
   document.activeElement?.blur();
   setCallouts([]);
   flyTo(REVEAL_SHOT);
-  sfx.siren(2.6);
+  playHeistAudio();
 }
 
 function finishHeist() {
@@ -3438,6 +3247,11 @@ $('handoffTake').addEventListener('click', () => finishHeist());
 revealSound.addEventListener('click', () => {
   sfx.on = !sfx.on;
   revealSound.textContent = sfx.on ? 'SOUND ON' : 'SOUND OFF';
+  if (!sfx.on) {
+    stopHeistAudio();
+  } else if (heist.stage === 'reveal' || recruitStep === 4) {
+    playHeistAudio();
+  }
 });
 addEventListener('keydown', e => { if (e.key === 'Escape' && heist.stage === 'reveal') finishHeist(); });
 if (new URLSearchParams(location.search).has('dev')) window.heistDebug = heist;   // ?dev: freeze the show at a moment with heistDebug.hold = true
