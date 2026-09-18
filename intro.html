@@ -113,30 +113,48 @@
   .btn.ghost-btn { background:transparent; border:1px solid #666; cursor:pointer; }
   .btn.ghost-btn:hover { border-color:#fff; background:rgba(255,255,255,.06); }
 
-  /* the Professors: this year's leads, lined up like a cast banner */
-  .cast { position:fixed; inset:0; z-index:6; overflow-x:hidden; overflow-y:auto; background:#0b0b0b; }
-  .cast-close { z-index:1; }
+  /* the Professors: this year's leads pinned to the planning board, red string to the target (the Professor's board) */
+  .cast { position:fixed; inset:0; z-index:6; overflow-x:hidden; overflow-y:auto;
+          background:radial-gradient(ellipse at 10% 6%, rgba(255, 186, 104, .18), transparent 38%),
+                     radial-gradient(ellipse at 50% 40%, #1d2c30 0, #111a1c 58%, #080c0d 100%); }
+  .cast-close { z-index:4; }
   .cast-inner { position:relative; padding:clamp(56px, 7vw, 90px) clamp(20px, 5vw, 64px) 40px; }
   .cast h2 { font:700 clamp(52px, 8vw, 116px)/.9 Oswald, Impact, sans-serif; margin:12px 0 10px; }
   .cast h2 .r { color:var(--red); }
   .cast .lead { color:#bbb; font-size:17px; margin:0; }
-  .lineup { display:flex; gap:14px; margin:30px 0 28px; padding:10px 0 12px; overflow-x:auto; scroll-snap-type:x mandatory;
-            scrollbar-width:thin; scrollbar-color:var(--red) #1a1a1a; }
-  .lead-card { position:relative; flex:0 0 clamp(150px, 15vw, 220px); aspect-ratio:3 / 4; margin:0; border-radius:12px;
-               overflow:hidden; background:#111; scroll-snap-align:start; transition:transform .35s; outline:none; }
-  .lead-card img { display:block; width:100%; height:100%; object-fit:cover; filter:grayscale(1) contrast(1.1) brightness(.92);
-                   transition:filter .45s, transform .7s; }
-  .lead-card::after { content:''; position:absolute; inset:0; pointer-events:none;
-                      background:linear-gradient(to top, rgba(10,10,10,.96) 6%, rgba(10,10,10,0) 55%), rgba(218,17,17,.22); }
-  .lead-card:hover, .lead-card:focus { transform:translateY(-8px); }
-  .lead-card:hover img, .lead-card:focus img { filter:none; transform:scale(1.04); }
-  .lead-card:hover::after, .lead-card:focus::after { background:linear-gradient(to top, rgba(10,10,10,.96) 6%, rgba(10,10,10,0) 55%); }
-  .lead-card figcaption { position:absolute; left:12px; right:12px; bottom:12px; z-index:1; }
-  .lead-card .role { display:inline-block; font:11px 'Roboto Mono', monospace; letter-spacing:.12em; color:#fff; background:var(--red);
-                    padding:2px 6px; border-radius:3px; text-transform:uppercase; }
-  .lead-card h3 { font:700 32px/1 Oswald, sans-serif; margin:4px 0 0; }
-  .lead-card h3 .r { color:var(--red); }
-  .lead-card .surname { font:500 14px Oswald, sans-serif; letter-spacing:.14em; color:#ddd; }
+  .board { position:relative; max-width:1060px; margin:44px auto 34px; padding:clamp(28px, 4vw, 54px) clamp(16px, 3vw, 44px);
+           border-radius:4px; background:radial-gradient(rgba(255, 255, 255, .035) 1px, transparent 1.4px) 0 0 / 6px 6px, #1b2326;
+           box-shadow:inset 0 0 0 10px #2a1d13, inset 0 0 0 12px #120c08, inset 0 0 60px rgba(0, 0, 0, .6), 0 30px 70px rgba(0, 0, 0, .55); }
+  .board-tape { position:absolute; left:50%; top:-15px; z-index:3; padding:6px 24px 7px; transform:translateX(-50%) rotate(-2deg);
+                background:rgba(233, 221, 183, .93); color:#1a1a1a; font:700 17px Oswald, sans-serif; letter-spacing:.32em;
+                box-shadow:0 3px 8px rgba(0, 0, 0, .35); }
+  .plan-strings { position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; overflow:visible; }
+  .plan-strings path { transition:stroke .25s, stroke-width .25s; }
+  .plan-strings path.on { stroke:#ff3b3b; stroke-width:3.4; }
+  .plan { position:relative; z-index:2; display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(24px, 3.4vw, 52px) clamp(16px, 3vw, 44px);
+          align-items:center; justify-items:center; }
+  .pin-card { position:relative; width:min(100%, 220px); margin:0; padding:10px 10px 0; background:#eee9df; border-radius:2px; outline:none;
+              box-shadow:0 12px 26px rgba(0, 0, 0, .55); transform:rotate(var(--r, 0deg)); transition:transform .35s, box-shadow .35s; }
+  .pin-card:hover, .pin-card:focus { transform:rotate(0deg) scale(1.05); z-index:3; box-shadow:0 20px 40px rgba(0, 0, 0, .65); }
+  .pin-card::before { content:''; position:absolute; left:50%; top:-9px; width:18px; height:18px; margin-left:-9px; border-radius:50%; z-index:2;
+                      background:radial-gradient(circle at 35% 32%, #ff7b7b, #c9161d 55%, #650a0d); box-shadow:0 4px 5px rgba(0, 0, 0, .5); }
+  .pin-card img { display:block; width:100%; aspect-ratio:3 / 4; object-fit:cover; background:#222; filter:grayscale(1) contrast(1.1); transition:filter .45s; }
+  .pin-card:hover img, .pin-card:focus img { filter:none; }
+  .pin-card figcaption { padding:9px 2px 11px; text-align:center; color:#161616; }
+  .pin-card h3 { font:700 clamp(19px, 2vw, 26px)/1 Oswald, sans-serif; letter-spacing:.03em; margin:0; }
+  .pin-card h3 .r { color:var(--red); }
+  .pin-card .surname { display:block; margin-top:3px; font:500 11px 'Roboto Mono', monospace; letter-spacing:.16em; color:#5a5a5a; }
+  .pin-card .role { display:inline-block; margin-top:7px; padding:2px 6px; background:var(--red); color:#fff; font:500 10px 'Roboto Mono', monospace;
+                    letter-spacing:.1em; text-transform:uppercase; }
+  .pin-card.hub { width:min(100%, 230px); padding:16px 14px 4px; background:#0f0f0f; box-shadow:0 12px 26px rgba(0, 0, 0, .6), 0 0 0 1px #2a2a2a; }
+  .pin-card.hub svg { display:block; width:74%; margin:2px auto 6px; overflow:visible; }
+  .pin-card.hub figcaption { color:#fff; }
+  .pin-card.hub h3 { font-size:clamp(24px, 2.6vw, 34px); }
+  .pin-card.hub .surname { color:#aaa; }
+  @media (max-width:767px) {
+    .plan { grid-template-columns:repeat(2, 1fr); }
+    .pin-card.hub { grid-column:1 / -1; order:-1; width:60%; }
+  }
 
   /* ---------- recruitment form (styled after the Money Heist character-profile template) ---------- */
   body.recruiting .hud, body.recruiting #camBtn, body.recruiting #ctrl { display:none; }
@@ -470,7 +488,11 @@
     <div class="kicker">ACM GHRCEM <i></i> THIS YEAR'S LEADS</div>
     <h2>THE <span class="r">PROFESSORS</span></h2>
     <p class="lead">Eight minds behind the plan. Meet them on 23 September.</p>
-    <div class="lineup" id="lineup"></div>
+    <div class="board" id="board">
+      <span class="board-tape">THE PLAN</span>
+      <svg class="plan-strings" id="planStrings" aria-hidden="true"></svg>
+      <div class="plan" id="lineup"></div>
+    </div>
     <a class="btn" href="#register" id="castJoin">JOIN THE CREW</a>
   </div>
 </section>
@@ -2874,15 +2896,48 @@ const LEADS = [
   ['Daksh', 'Pawar', 'Social Media Lead', 'daksh-pawar'],
 ];
 const castEl = $('cast');
-$('lineup').innerHTML = LEADS.map(([first, last, role, file]) => `
-  <figure class="lead-card" tabindex="0">
+// the planning board: eight leads pinned around the target, red string from each pin to the middle
+const MASK_ART = `<defs><radialGradient id="maskShadeHub" cx="45%" cy="38%" r="70%"><stop offset="0" stop-color="#fbf5e8"/><stop offset=".75" stop-color="#e9dcc2"/><stop offset="1" stop-color="#cdbb99"/></radialGradient></defs> <path d="M44 124 Q30 176 62 200 M196 124 Q210 176 178 200" stroke="#111" stroke-width="3" fill="none"/> <path d="M120 16 C68 16 42 58 44 118 C46 186 78 262 120 284 C162 262 194 186 196 118 C198 58 172 16 120 16 Z" fill="url(#maskShadeHub)" stroke="#b9a582" stroke-width="2"/> <path d="M84 50 Q120 38 156 50 M94 62 Q120 55 146 62" stroke="#cbb58e" stroke-width="2" fill="none" stroke-linecap="round"/> <path d="M70 94 Q86 66 110 88 M130 88 Q154 66 170 94" stroke="#15100c" stroke-width="9" fill="none" stroke-linecap="round"/> <ellipse cx="92" cy="112" rx="15" ry="12" fill="#e9dcc2" stroke="#3a2d22" stroke-width="3"/> <ellipse cx="148" cy="112" rx="15" ry="12" fill="#e9dcc2" stroke="#3a2d22" stroke-width="3"/> <ellipse cx="92" cy="113" rx="7" ry="6" fill="#0b0b0b"/> <ellipse cx="148" cy="113" rx="7" ry="6" fill="#0b0b0b"/> <path d="M112 104 Q106 146 102 164 Q120 176 138 164 Q134 146 128 104 Z" fill="#e6d6b6"/> <path d="M112 106 Q106 146 102 164 Q120 176 138 164" stroke="#a88a63" stroke-width="3" fill="none" stroke-linecap="round"/> <circle cx="76" cy="168" r="14" fill="#e8998a" opacity=".3"/> <circle cx="164" cy="168" r="14" fill="#e8998a" opacity=".3"/> <path d="M120 180 Q104 176 94 182 Q82 188 82 172 Q82 154 98 142 M120 180 Q136 176 146 182 Q158 188 158 172 Q158 154 142 142" stroke="#111" stroke-width="4.5" fill="none" stroke-linecap="round"/> <path d="M104 204 Q120 211 136 204" stroke="#8a3a2e" stroke-width="3.5" fill="none" stroke-linecap="round"/> <path d="M112 236 Q120 241 128 236" stroke="#c4a67c" stroke-width="2.5" fill="none"/>`;
+const TILTS = [-3, 2, -1.5, 3.5, -2.5, 1.5, -3.5, 2.5];
+const pinCard = ([first, last, role, file], i) => `
+  <figure class="pin-card" tabindex="0" data-i="${i}" style="--r:${TILTS[i]}deg">
     <img src="team/cast/${file}.jpg" alt="${first} ${last}, ${role}" loading="lazy">
-    <figcaption><span class="role">${role}</span><h3>${splitName(first.toUpperCase())}</h3><span class="surname">${last.toUpperCase()}</span></figcaption>
-  </figure>`).join('');
+    <figcaption><h3>${splitName(first.toUpperCase())}</h3><span class="surname">${last.toUpperCase()}</span><span class="role">${role}</span></figcaption>
+  </figure>`;
+const HUB = `
+  <figure class="pin-card hub" style="--r:-1deg">
+    <svg viewBox="0 0 240 300" aria-hidden="true">${MASK_ART}</svg>
+    <figcaption><h3>THE <span class="r">TARGET</span></h3><span class="surname">GHRCEM · 23 SEPT 2026</span></figcaption>
+  </figure>`;
+$('lineup').innerHTML = [...LEADS.slice(0, 4).map(pinCard), HUB, ...LEADS.slice(4).map((lead, i) => pinCard(lead, i + 4))].join('');
+
+function drawStrings() {
+  if (castEl.hidden) return;
+  const board = $('board'), svg = $('planStrings'), b = board.getBoundingClientRect();
+  const pinOf = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2 - b.left, r.top - b.top + 1]; };
+  const [hx, hy] = pinOf(board.querySelector('.hub'));
+  svg.setAttribute('viewBox', `0 0 ${b.width} ${b.height}`);
+  svg.innerHTML = `<g fill="none" stroke="#c9161d" stroke-width="2.2" stroke-linecap="round" style="filter:drop-shadow(0 2px 1.5px rgba(0,0,0,.5))">${
+    [...board.querySelectorAll('.pin-card:not(.hub)')].map(card => {
+      const [x, y] = pinOf(card), sag = Math.hypot(hx - x, hy - y) * .09;        // string sags a little
+      return `<path data-i="${card.dataset.i}" d="M${x.toFixed(1)} ${y.toFixed(1)} Q${((x + hx) / 2).toFixed(1)} ${((y + hy) / 2 + sag).toFixed(1)} ${hx.toFixed(1)} ${hy.toFixed(1)}"/>`;
+    }).join('')}</g>`;
+}
+const lightString = (e, on) => {
+  const card = e.target.closest('.pin-card:not(.hub)');
+  if (card) $('planStrings').querySelector(`path[data-i="${card.dataset.i}"]`)?.classList.toggle('on', on);
+};
+$('lineup').addEventListener('pointerover', e => lightString(e, true));
+$('lineup').addEventListener('pointerout', e => lightString(e, false));
+$('lineup').addEventListener('focusin', e => lightString(e, true));
+$('lineup').addEventListener('focusout', e => lightString(e, false));
+addEventListener('resize', drawStrings);
+document.fonts?.ready.then(drawStrings);
 
 function closeCast() { castEl.hidden = true; }
 $('castBtn').addEventListener('click', e => {
   castEl.hidden = false;
+  setTimeout(drawStrings, 0);                       // strings need the cards laid out first
   burstFrom(e.currentTarget);
   castEl.querySelector('.cast-close').focus();
 });
