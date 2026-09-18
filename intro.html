@@ -2275,7 +2275,8 @@ document.getElementById('copyview').addEventListener('click', async e => {
 
 // ---------- recruitment form: each step has its own campus scene, and the camera flies between them ----------
 const CREW_MIN = 2, CREW_MAX = 4;                 // TODO(ACM): confirm crew size
-const REGISTRATION_ENDPOINT = '';                 // TODO(ACM): URL that stores registrations (e.g. a Google Apps Script web app)
+const REGISTRATION_ENDPOINT = '';
+const DEV_MODE = new URLSearchParams(location.search).has('dev');   // ?dev = someone testing: no validation, pre-filled crew, nothing sent                 // TODO(ACM): URL that stores registrations (e.g. a Google Apps Script web app)
 const BRANCHES = ['Computer Engineering', 'Computer Science & Engineering', 'Information Technology', 'AI & Data Science',
                   'AI & Machine Learning', 'Electronics & Telecommunication', 'Electrical Engineering', 'Mechanical Engineering',
                   'Civil Engineering', 'MBA', 'MCA', 'Other'];
@@ -2550,6 +2551,7 @@ function problemWith(el) {
 }
 
 function checkStep(i) {
+  if (DEV_MODE) return '';                          // testers click straight through
   const fields = [...steps[i].querySelectorAll('input, select')];
   for (const el of fields) el.classList.remove('bad');
   for (const el of fields) {
@@ -2598,7 +2600,7 @@ const crewList = data => [data.leader, ...data.members].map((person, i) => `
   ${CHARACTERS[person.codename] ? `<small class="trait">${escapeHtml(CHARACTERS[person.codename])}</small>` : ''}</div></li>`).join('');
 
 async function submitRegistration(data) {
-  if (REGISTRATION_ENDPOINT) {
+  if (REGISTRATION_ENDPOINT && !DEV_MODE) {          // test runs never reach the real sheet
     await fetch(REGISTRATION_ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) });
   } else {
     console.warn('REGISTRATION_ENDPOINT is empty: this registration is only kept in this browser.');
@@ -2648,7 +2650,23 @@ function showStep(i) {
   setCallouts(stepCallouts(i));
 }
 
+// ?dev: a ready-made crew (codenames already assigned; RETAKE QUIZ still works)
+function devPrefill() {
+  const f = form.elements;
+  if (f.crew.value) return;
+  f.crew.value = 'Dev Test Crew';
+  f.leadName.value = 'Test Leader'; f.leadBranch.value = BRANCHES[0]; f.leadYear.value = YEARS[3];
+  f.leadPhone.value = '9000000001'; f.leadEmail.value = 'test@example.com'; f.leadCode.value = 'TOKYO';
+  memberIds.forEach((id, k) => {
+    f[`m${id}Name`].value = `Test Member ${k + 1}`; f[`m${id}Branch`].value = BRANCHES[2]; f[`m${id}Year`].value = YEARS[1];
+    f[`m${id}Phone`].value = `900000000${k + 2}`; f[`m${id}Code`].value = ['RIO', 'NAIROBI', 'DENVER'][k] || '';
+  });
+  f.rules.checked = true;
+  refreshCrew();
+}
+
 function openRecruit() {
+  if (DEV_MODE) devPrefill();
   t = END;
   document.body.classList.add('recruiting');
   form.hidden = false;
