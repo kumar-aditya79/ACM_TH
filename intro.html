@@ -230,6 +230,110 @@
     .quiz-name { font-size:56px; }
   }
 
+  /* ---------- after sealing: the heist begins (alarm, hot air balloons, the vault, the masked crew) ---------- */
+  .recruit, .callouts, .corner.tl { transition:opacity .45s; }
+  body.revealing .recruit, body.revealing .callouts, body.revealing .corner.tl { opacity:0; pointer-events:none; }
+  body.heist #scene { filter:none; }                      /* the paper model turns to full colour */
+  .reveal { position:fixed; inset:0; z-index:8; pointer-events:none; overflow:hidden; transition:opacity .6s; }
+  .reveal.done { opacity:0; }
+  .reveal-flash { position:absolute; inset:0; opacity:0;
+                  background:radial-gradient(ellipse at 50% 45%, rgba(218,17,17,0) 35%, rgba(218,17,17,.6) 100%); }
+  .reveal.alarm .reveal-flash { animation:alarm .42s ease-in-out 6 alternate; }
+  @keyframes alarm { to { opacity:1; } }
+  .reveal-title { position:absolute; left:50%; top:44%; width:max-content; max-width:94vw; text-align:center; opacity:0;
+                  transform:translate(-50%, -50%) scale(.82);
+                  transition:opacity .45s, top .9s cubic-bezier(.6, 0, .2, 1), transform .9s cubic-bezier(.6, 0, .2, 1); }
+  .reveal-title.in { opacity:1; transform:translate(-50%, -50%) scale(1); }
+  .reveal-title.up { top:13%; transform:translate(-50%, -50%) scale(.52); }
+  .reveal-title small { display:inline-flex; align-items:center; gap:10px; font:500 13px 'Roboto Mono', monospace; letter-spacing:.2em;
+                        color:#fff; background:rgba(10,10,10,.65); padding:6px 12px; }
+  .reveal-title small i { width:10px; height:10px; background:var(--red); }
+  .reveal-title h2 { font:700 clamp(58px, 11vw, 156px)/.88 Oswald, Impact, sans-serif; margin:14px 0 0; color:#fff;
+                     text-shadow:0 8px 40px rgba(0,0,0,.65); }
+  .reveal-title h2 .r { color:var(--red); }
+  .reveal-stage { position:absolute; left:0; right:0; bottom:0; height:clamp(250px, 50vh, 470px); }
+  .reveal-steps { position:absolute; left:0; bottom:0; width:100%; height:30%; opacity:0; transform:translateY(40px);
+                  transition:opacity .5s, transform .8s cubic-bezier(.2, 1, .3, 1);
+                  -webkit-mask-image:linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+                  mask-image:linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); }
+  .reveal.staged .reveal-steps { opacity:1; transform:none; }
+  .reveal-back { position:absolute; left:50%; bottom:26%; transform:translateX(-50%); display:flex; align-items:flex-end;
+                 column-gap:clamp(96px, 17vw, 250px); }            /* the crew on the top step, a gap for the leader */
+  .reveal-back .side { display:flex; align-items:flex-end; gap:clamp(8px, 2.6vw, 38px); }
+  .reveal-back .member-fig figcaption b { font-size:clamp(14px, 1.8vw, 24px); }
+  .reveal-front { position:absolute; left:50%; bottom:3%; transform:translateX(-50%); }   /* the leader, front and centre */
+  .member-fig.lead { width:clamp(90px, 14vw, 190px); }
+  .shout { position:absolute; left:0; top:0; padding:8px 12px 9px; border-radius:4px; background:#fff; color:#0d0d0d; white-space:nowrap;
+           font:700 clamp(14px, 1.8vw, 22px)/1 Oswald, sans-serif; letter-spacing:.04em; box-shadow:0 8px 24px rgba(0,0,0,.45);
+           opacity:0; transform:translate(0, -100%) scale(.6); transform-origin:0 100%;
+           transition:opacity .2s, transform .35s cubic-bezier(.2, 1.6, .4, 1); }
+  .shout::after { content:''; position:absolute; left:12px; bottom:-8px; border:8px solid transparent; border-top-color:#fff; border-bottom:0; }
+  .shout.on { opacity:1; transform:translate(0, -100%) scale(1); }
+  .shout b { color:var(--red); }
+  /* the last beat: a mask slid across the table to you, "now you're one of us" */
+  .handoff { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity .6s; }
+  .reveal.handoff-on .handoff { opacity:1; pointer-events:auto; }
+  .reveal-stage { transition:opacity .5s; }
+  .reveal.handoff-on .reveal-stage, .reveal.handoff-on .reveal-title, .reveal.handoff-on .shout { opacity:0 !important; }
+  .handoff-dim { position:absolute; inset:0; background:radial-gradient(ellipse at 40% 70%, rgba(8, 10, 12, .35), rgba(8, 10, 12, .93) 75%); }
+  .handoff-table { position:absolute; left:-15%; right:-15%; bottom:-8%; height:62%; transform-origin:50% 100%; opacity:0;
+                   transform:perspective(900px) rotateX(58deg) translateY(30%); transition:transform 1s cubic-bezier(.2, .9, .3, 1), opacity .6s;
+                   background:radial-gradient(ellipse at 42% 38%, #3b6470 0, #24434d 38%, #13262d 80%);
+                   box-shadow:inset 0 18px 0 #5a3b26, inset 0 26px 0 #2c1c12; }
+  .reveal.handoff-on .handoff-table { transform:perspective(900px) rotateX(58deg); opacity:1; }
+  .handoff-slide { position:absolute; left:32%; bottom:2%; width:clamp(170px, 24vw, 320px); opacity:0;
+                   transform:translate(-50%, -34vh) scale(.5) rotate(-18deg);
+                   transition:transform 1.2s cubic-bezier(.16, .9, .25, 1) .35s, opacity .4s .35s; }
+  .reveal.handoff-on .handoff-slide { transform:translate(-50%, 0) scale(1) rotate(-6deg); opacity:1; }
+  .handoff-mask { transform:perspective(800px) rotateX(34deg); filter:drop-shadow(0 26px 22px rgba(0, 0, 0, .6)); }
+  .handoff-mask svg { display:block; width:100%; height:auto; overflow:visible; }
+  .handoff-hand { position:absolute; right:-36%; top:-20%; width:64%; transition:transform .7s ease-in 1.8s, opacity .5s 2s; }
+  .reveal.handoff-on .handoff-hand { transform:translate(55%, -55%); opacity:0; }
+  .handoff-tag { position:absolute; left:-30%; top:60%; padding:4px 8px 5px; background:#efe6cf; color:#1a1a1a; white-space:nowrap;
+                 font:600 13px 'Roboto Mono', monospace; letter-spacing:.08em; transform:rotate(-12deg); box-shadow:0 4px 10px rgba(0, 0, 0, .35); }
+  .handoff-tag::after { content:''; position:absolute; left:100%; top:50%; width:30px; height:1.5px; background:#111; transform:rotate(-20deg); transform-origin:0 50%; }
+  .handoff-text { position:absolute; left:56%; top:50%; width:min(560px, 40vw); transform:translateY(-50%); }
+  .handoff-text > * { opacity:0; transform:translateY(18px); transition:opacity .5s, transform .6s cubic-bezier(.2, 1, .3, 1); }
+  .reveal.handoff-on .handoff-text > * { opacity:1; transform:none; }
+  .reveal.handoff-on .handoff-text small { transition-delay:1.2s; }
+  .reveal.handoff-on .handoff-text h2 { transition-delay:1.45s; }
+  .reveal.handoff-on .handoff-text p { transition-delay:1.7s; }
+  .reveal.handoff-on .handoff-text .btn { transition-delay:1.95s; }
+  .handoff-text small { display:inline-flex; align-items:center; gap:10px; font:500 13px 'Roboto Mono', monospace; letter-spacing:.2em; color:#fff; }
+  .handoff-text small i { width:10px; height:10px; background:var(--red); }
+  .handoff-text h2 { font:700 clamp(46px, 6.4vw, 104px)/.9 Oswald, Impact, sans-serif; color:#fff; margin:14px 0; }
+  .handoff-text h2 .r { color:var(--red); }
+  .handoff-text p { color:#d8d8d8; font-size:clamp(14px, 1.3vw, 17px); margin:0 0 22px; max-width:42ch; }
+  .handoff-text .btn { border:0; cursor:pointer; }
+  @media (max-width:767px) {
+    .handoff-slide { left:50%; bottom:6%; width:clamp(130px, 44vw, 200px); }
+    .handoff-text { left:20px; right:20px; top:10%; width:auto; transform:none; text-align:center; }
+    .handoff-text h2 { font-size:clamp(40px, 12vw, 60px); }
+    .handoff-text p { margin:0 auto 16px; }
+  }
+  .checklist small.trait { color:#d6d0c4; font-style:italic; margin-top:2px; }
+  .member-fig { width:calc(clamp(64px, 10vw, 140px) * var(--h, 1)); margin:0; text-align:center; opacity:0;
+                transform:translateY(90px); transition:opacity .35s, transform .75s cubic-bezier(.2, 1.5, .4, 1); }
+  .member-fig.in { opacity:1; transform:none; }
+  .member-fig svg { display:block; width:100%; height:auto; overflow:visible; filter:drop-shadow(0 10px 18px rgba(0,0,0,.45)); }
+  .member-fig.mirror svg { transform:scaleX(-1); }
+  .member-fig.fire svg { animation:kick .3s ease-out; }
+  @keyframes kick { 35% { translate:0 -7px; } }
+  .member-fig figcaption b { display:block; font:700 clamp(17px, 2.4vw, 32px)/1 Oswald, sans-serif; letter-spacing:.04em; color:#fff;
+                             text-shadow:0 2px 14px rgba(0,0,0,.85); }
+  .member-fig figcaption b .r { color:var(--red); }
+  .member-fig figcaption small { display:inline-block; margin-top:5px; padding:2px 6px; font:500 10px 'Roboto Mono', monospace;
+                                 letter-spacing:.12em; text-transform:uppercase; color:#fff; background:var(--red); white-space:nowrap; }
+  .reveal-tools { position:absolute; top:14px; right:16px; display:flex; gap:8px; pointer-events:auto; }
+  .reveal-tools .ctrl { position:static; background:rgba(10,10,10,.55); }
+  .checklist.masks li::before { content:''; width:28px; height:28px; border-radius:50%;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23b51c16'/%3E%3Cellipse cx='20' cy='21.5' rx='11.5' ry='14.5' fill='%23eee0c4'/%3E%3Cpath d='M11 15 Q14.5 10 18.5 13.5 M21.5 13.5 Q25.5 10 29 15' stroke='%2318120d' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15.5' cy='17.5' r='2.7' fill='%23fbf7ee' stroke='%232b2119' stroke-width='.8'/%3E%3Ccircle cx='24.5' cy='17.5' r='2.7' fill='%23fbf7ee' stroke='%232b2119' stroke-width='.8'/%3E%3Ccircle cx='15.6' cy='17.7' r='1.3' fill='%23141414'/%3E%3Ccircle cx='24.4' cy='17.7' r='1.3' fill='%23141414'/%3E%3Cpath d='M20 26.5 Q16.5 25.8 15 27 Q12.5 28 12.5 24.5 Q12.5 21.5 15.5 20.5 M20 26.5 Q23.5 25.8 25 27 Q27.5 28 27.5 24.5 Q27.5 21.5 24.5 20.5' stroke='%23141414' stroke-width='1.3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat; }
+  @media (max-width:767px) {
+    .reveal-title.up { top:10%; transform:translate(-50%, -50%) scale(.6); }
+    .member-fig figcaption small { font-size:8px; padding:1px 4px; }
+    .reveal-back { column-gap:84px; }
+  }
+
   @media (max-width:767px) {
     .recruit { left:0; right:0; top:auto; bottom:0; width:auto; max-height:68vh; border-radius:18px 18px 0 0; }
     .recruit h2 { font-size:40px; }
@@ -343,7 +447,7 @@
       <div class="kicker">FILE SEALED <i></i> <span id="sealedCrew"></span></div>
       <h2>WELCOME TO THE <span class="r">CREW</span></h2>
       <p class="crew-id" id="crewId"></p>
-      <ul class="checklist" id="sealedList"></ul>
+      <ul class="checklist masks" id="sealedList"></ul>
       <button type="button" class="pill" id="shareBtn">SHARE WITH YOUR CREW ▸</button>
       <p class="note">Take a screenshot. Bring your Crew ID on 23 September.</p>
     </section>
@@ -371,6 +475,68 @@
   <div class="quiz-card">
     <button class="quiz-close" id="quizClose" type="button" aria-label="Close">✕</button>
     <div class="quiz-body" id="quizBody"></div>
+  </div>
+</section>
+
+<section class="reveal" id="reveal" hidden aria-live="polite">
+  <div class="reveal-flash" aria-hidden="true"></div>
+  <div class="reveal-title" id="revealTitle">
+    <small>FILE SEALED <i></i> <span id="revealCrewName"></span></small>
+    <h2>THE HEIST<br>HAS <span class="r">BEGUN</span></h2>
+  </div>
+  <div class="reveal-stage">
+    <svg class="reveal-steps" viewBox="0 0 1000 160" preserveAspectRatio="none" aria-hidden="true">
+      <defs><linearGradient id="stepShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient></defs>
+      <rect x="120" y="0" width="760" height="42" fill="#57534d"/><rect x="120" y="0" width="760" height="7" fill="#9c978e"/>
+      <rect x="80" y="40" width="840" height="42" fill="#625e57"/><rect x="80" y="40" width="840" height="7" fill="#a8a399"/>
+      <rect x="40" y="80" width="920" height="42" fill="#6d6962"/><rect x="40" y="80" width="920" height="7" fill="#b3aea4"/>
+      <rect x="0" y="120" width="1000" height="40" fill="#78746c"/><rect x="0" y="120" width="1000" height="7" fill="#beb9ae"/>
+      <rect x="0" y="0" width="1000" height="160" fill="url(#stepShade)"/>
+    </svg>
+    <div class="reveal-back" id="revealCrew"></div>
+    <div class="reveal-front" id="revealLead"></div>
+  </div>
+  <div class="shout" id="revealShout"></div>
+  <div class="handoff">
+    <div class="handoff-dim"></div>
+    <div class="handoff-table"></div>
+    <div class="handoff-slide">
+      <div class="handoff-mask">
+        <svg viewBox="0 0 240 300" aria-hidden="true">
+          <defs><radialGradient id="maskShade" cx="45%" cy="38%" r="70%"><stop offset="0" stop-color="#fbf5e8"/><stop offset=".75" stop-color="#e9dcc2"/><stop offset="1" stop-color="#cdbb99"/></radialGradient></defs>
+          <path d="M44 124 Q30 176 62 200 M196 124 Q210 176 178 200" stroke="#111" stroke-width="3" fill="none"/>
+          <path d="M120 16 C68 16 42 58 44 118 C46 186 78 262 120 284 C162 262 194 186 196 118 C198 58 172 16 120 16 Z" fill="url(#maskShade)" stroke="#b9a582" stroke-width="2"/>
+          <path d="M84 50 Q120 38 156 50 M94 62 Q120 55 146 62" stroke="#cbb58e" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M70 94 Q86 66 110 88 M130 88 Q154 66 170 94" stroke="#15100c" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <ellipse cx="92" cy="112" rx="15" ry="12" fill="#e9dcc2" stroke="#3a2d22" stroke-width="3"/>
+          <ellipse cx="148" cy="112" rx="15" ry="12" fill="#e9dcc2" stroke="#3a2d22" stroke-width="3"/>
+          <ellipse cx="92" cy="113" rx="7" ry="6" fill="#0b0b0b"/>
+          <ellipse cx="148" cy="113" rx="7" ry="6" fill="#0b0b0b"/>
+          <path d="M112 104 Q106 146 102 164 Q120 176 138 164 Q134 146 128 104 Z" fill="#e6d6b6"/>
+          <path d="M112 106 Q106 146 102 164 Q120 176 138 164" stroke="#a88a63" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="76" cy="168" r="14" fill="#e8998a" opacity=".3"/>
+          <circle cx="164" cy="168" r="14" fill="#e8998a" opacity=".3"/>
+          <path d="M120 180 Q104 176 94 182 Q82 188 82 172 Q82 154 98 142 M120 180 Q136 176 146 182 Q158 188 158 172 Q158 154 142 142" stroke="#111" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+          <path d="M104 204 Q120 211 136 204" stroke="#8a3a2e" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M112 236 Q120 241 128 236" stroke="#c4a67c" stroke-width="2.5" fill="none"/>
+        </svg>
+      </div>
+      <svg class="handoff-hand" viewBox="0 0 170 150" aria-hidden="true">
+        <path d="M170 12 L118 40 Q96 52 84 70 L50 112 Q42 122 50 128 Q58 134 66 124 L86 100 L70 132 Q64 142 72 146 Q80 150 86 140 L104 108 L96 138 Q94 148 102 148 Q110 148 112 138 L124 104 L124 128 Q126 138 134 136 Q142 134 140 124 L142 86 Q150 64 170 52 Z" fill="#141414"/>
+        <path d="M170 0 L126 22 L148 62 L170 50 Z" fill="#c8201a"/>
+      </svg>
+      <span class="handoff-tag" id="handoffTag"></span>
+    </div>
+    <div class="handoff-text">
+      <small>HERE. PUT IT ON. <i></i> <span id="handoffCrew"></span></small>
+      <h2>NOW YOU'RE<br><span class="r">ONE OF US.</span></h2>
+      <p>Your Crew ID is on the tag. Bring it to campus on 23 September. The Professor will be waiting.</p>
+      <button class="btn" type="button" id="handoffTake">TAKE THE MASK ▸</button>
+    </div>
+  </div>
+  <div class="reveal-tools">
+    <button class="ctrl" type="button" id="revealSound">SOUND ON</button>
+    <button class="ctrl" type="button" id="revealSkip">SKIP ▸</button>
   </div>
 </section>
 
@@ -1474,12 +1640,55 @@ openField.visible = false;
 scene.add(openField);
 buildings.push({ group: openField, delay: .3 });
 
+// ---------- bus yard along the main building's north side (ACM photo): college buses, white vans, shade trees ----------
+{
+  const [ax, ay] = main.outer[0], [bx, by] = main.outer[1];             // north face, west end to east end
+  const flen = Math.hypot(bx - ax, by - ay), ux = (bx - ax) / flen, uy = (by - ay) / flen;
+  let nx = uy, ny = -ux;                                                  // away from the building
+  if (inPolygon([ax + ux * flen / 2 + nx * 2, ay + uy * flen / 2 + ny * 2], main.outer)) { nx = -nx; ny = -ny; }
+  const at = (s, d) => [ax + ux * s + nx * d, ay + uy * s + ny * d];       // s: along the face, d: out from it
+  const yard = new THREE.Group();
+  const wheelGeo = new THREE.CylinderGeometry(.5, .5, .3, 10).rotateZ(Math.PI / 2);
+  let s = 27;
+  for (const kind of ['van', 'bus', 'van', 'bus']) {
+    const isBus = kind === 'bus', L = isBus ? 9.6 : 5.6, W = isBus ? 2.5 : 2.1, H = isBus ? 2.9 : 2.4;
+    s += L / 2;
+    const v = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.BoxGeometry(W, H, L), isBus ? busMat : carMat);
+    body.position.y = .45 + H / 2;
+    const windows = new THREE.Mesh(new THREE.BoxGeometry(W + .04, .7, L * .84), glassMat);
+    windows.position.y = .45 + H * .7;
+    v.add(body, windows);
+    for (const wx of [-W / 2, W / 2]) for (const wz of [-L * .32, L * .32]) {
+      const wheel = new THREE.Mesh(wheelGeo, glassMat);
+      wheel.position.set(wx, .5, wz);
+      v.add(wheel);
+    }
+    v.position.copy(P(...at(s, 9)));
+    v.rotation.y = Math.atan2(ux, uy);
+    yard.add(v);
+    s += L / 2 + 1.8;
+  }
+  for (let k = 0; k < 6; k++) {                                           // the tree line between the buses and the building
+    const [x, y] = at(22 + k * 8, 3.8);
+    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(.22, .32, 4.4, 6), trunkMat);
+    trunk.position.copy(P(x, y, 2.2));
+    const crown = new THREE.Mesh(new THREE.SphereGeometry(2.8, 10, 8), leafMat);
+    crown.position.copy(P(x, y, 5.6));
+    yard.add(trunk, crown);
+  }
+  yard.visible = false;
+  scene.add(yard);
+  buildings.push({ group: yard, delay: .55 });
+}
+
 // ---------- the vault: pallets of gold bars and cash bundles in the main building's courtyard ----------
 const goldMat = tinted(0xffc21a), cashMat = tinted(0xffffff), palletMat = tinted(0x8a6a45);
 goldMat.roughness = .35;
 goldMat.metalness = .3;
 goldMat.emissive.set(0x5a3c00);                     // stays golden without reflections to pick up
 wallMats.push(goldMat, cashMat, palletMat);
+let vaultGroup = null;                              // the heist lifts it out of the courtyard
 {
   const COURT_MID = [-12, -51.6], U = [.953, .302], V = [-.302, .953];     // courtyard middle, along and across its long side
   const inCourt = (a, b) => [COURT_MID[0] + U[0] * a + V[0] * b, COURT_MID[1] + U[1] * a + V[1] * b];
@@ -1509,15 +1718,21 @@ wallMats.push(goldMat, cashMat, palletMat);
     });
     return mesh;
   };
-  const vault = new THREE.Group();
-  vault.add(
+  const vault = new THREE.Group(), pile = new THREE.Group();
+  for (const mesh of [
     stack(new THREE.BoxGeometry(3.4, .2, 2.4), palletMat, pallets),
     stack(barGeo, goldMat, golds),
     stack(bundleGeo, cashMat, bundles, ['#7fa87a', '#8fb58a', '#6f9a6b', '#a3c29a']),
-  );
+  ]) {
+    mesh.position.copy(P(-COURT_MID[0], -COURT_MID[1]));   // instances sit in world coordinates: this puts the pile's origin on the courtyard middle
+    pile.add(mesh);
+  }
+  vault.add(pile);
+  vault.position.copy(P(...COURT_MID));
   vault.visible = false;
   scene.add(vault);
   buildings.push({ group: vault, delay: .9 });
+  vaultGroup = vault;
 }
 
 // ---------- the plan: a made-up red route with pins ----------
@@ -2042,17 +2257,17 @@ const YEARS = ['First year', 'Second year', 'Third year', 'Final year', 'Postgra
 // Money Heist identities the quiz can hand out (The Professor is reserved for the ACM leads).
 // One per person -- no repeats inside a crew. Descriptions are spoiler-free.
 const CHARACTERS = {
-  TOKYO:     'Runs on instinct and never backs down -- first to the fire, last to quit.',
+  TOKYO:     'Runs on instinct and never backs down: first to the fire, last to quit.',
   BERLIN:    'Elegant, magnetic, sure of the plan. Born to command a room.',
   NAIROBI:   'The heart of the crew: lifts everyone up and keeps standards high.',
   RIO:       'The tech brain. Hand this one a laptop and the cameras go dark.',
   DENVER:    'Loud laugh, bigger heart, loyal to the end whatever the odds.',
-  MOSCOW:    'Calm, patient, fatherly -- digs in and keeps the crew steady.',
+  MOSCOW:    'Calm, patient and fatherly. Digs in and keeps the crew steady.',
   HELSINKI:  'The gentle giant: quiet strength you want standing beside you.',
   LISBON:    'Reads people and pressure fast. Sharp negotiator, sharper mind.',
   STOCKHOLM: 'Adapts in seconds and surprises everyone when it counts.',
   PALERMO:   'Brilliant engineer with a flair for the dramatic, impossible plan.',
-  'BOGOTÁ':  'The fixer and welder -- steady hands that hold the whole job together.',
+  'BOGOTÁ':  'The fixer and welder: steady hands that hold the whole job together.',
   MARSEILLE: 'Quiet and disciplined. Says little, misses nothing.',
   MANILA:    'Undercover and watchful: blends in and sees what others miss.',
 };
@@ -2151,7 +2366,8 @@ function placeFlightCamera(dt) {
   camera.lookAt(new THREE.Vector3().lerpVectors(from.target, to.target, e));
   // keep the scene clear of the form: push it right on desktop, up on phones
   const w = innerWidth, h = innerHeight;
-  if (w >= 768) camera.setViewOffset(w, h, -Math.min(480, w * .42) / 2, 0, w, h);
+  if (document.body.classList.contains('revealing')) camera.clearViewOffset();   // the form is off screen during the heist
+  else if (w >= 768) camera.setViewOffset(w, h, -Math.min(480, w * .42) / 2, 0, w, h);
   else camera.setViewOffset(w, h, 0, h * .22, w, h);
   camera.updateProjectionMatrix();
 }
@@ -2352,7 +2568,8 @@ function readCrew() {
 }
 const crewList = data => [data.leader, ...data.members].map((person, i) => `
   <li><div><b>${escapeHtml(person.codename)} · ${escapeHtml(person.name)}</b>
-  <small>${i ? 'Member' : 'Leader'} · ${escapeHtml(person.branch)} · ${escapeHtml(person.year)} · ${escapeHtml(person.phone)}</small></div></li>`).join('');
+  <small>${i ? 'Member' : 'Leader'} · ${escapeHtml(person.branch)} · ${escapeHtml(person.year)} · ${escapeHtml(person.phone)}</small>
+  ${CHARACTERS[person.codename] ? `<small class="trait">${escapeHtml(CHARACTERS[person.codename])}</small>` : ''}</div></li>`).join('');
 
 async function submitRegistration(data) {
   if (REGISTRATION_ENDPOINT) {
@@ -2414,7 +2631,7 @@ function openRecruit() {
 }
 
 function closeRecruit() {
-  document.body.classList.remove('recruiting');
+  document.body.classList.remove('recruiting', 'heist');
   form.hidden = true;
   recruitStep = -1;
   flight = null;
@@ -2439,6 +2656,7 @@ backBtn.addEventListener('click', () => (recruitStep === 0 ? closeRecruit() : sh
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
+  if (document.body.classList.contains('revealing')) return;          // the heist is playing: never register twice
   if (recruitStep === 4) {
     resetRecruit();
     closeRecruit();
@@ -2454,6 +2672,7 @@ form.addEventListener('submit', async e => {
     burstFrom(nextBtn);
     return;
   }
+  sfx.unlock();                                   // unlock audio on this click, before any await
   nextBtn.disabled = true;                        // no double registrations from a double click
   nextBtn.textContent = 'SEALING…';
   try {
@@ -2463,8 +2682,7 @@ form.addEventListener('submit', async e => {
     $('sealedCrew').textContent = data.crew.toUpperCase();
     $('sealedList').innerHTML = crewList(data);
     try { localStorage.removeItem(DRAFT_KEY); } catch {}
-    showStep(4);
-    moneyRain();
+    try { startHeist(data); } catch (err) { console.error(err); showStep(4); moneyRain(); }   // the heist begins, then the sealed file
   } catch {
     formError.textContent = "Couldn't send your file. Check your internet and try again.";
     nextBtn.textContent = 'SEAL THE FILE ▸';
@@ -2617,18 +2835,19 @@ function drawMoney(dt) {
   money.clearRect(0, 0, innerWidth, innerHeight);
   notes = notes.filter(n => (n.life -= dt) > 0 && n.y < innerHeight + 80);
   for (const n of notes) {
-    n.vy = Math.min(n.vy + 900 * dt, 240);           // paper falls slowly
-    n.vx *= Math.exp(-2 * dt);
+    n.vy = Math.min(n.vy + (n.heavy ? 1500 : 900) * dt, n.heavy ? 900 : 240);   // paper falls slowly, gold doesn't
+    n.vx *= Math.exp(-(n.heavy ? .5 : 2) * dt);
     n.flip += n.flipSpeed * dt;
-    n.x += (n.vx + Math.sin(n.flip) * 40) * dt;
+    n.x += (n.vx + (n.heavy ? 0 : Math.sin(n.flip) * 40)) * dt;
     n.y += n.vy * dt;
-    n.rot += n.spin * dt;
+    n.rot += n.spin * dt * (n.heavy ? .5 : 1);
+    const img = n.img || NOTE;
     money.save();
     money.globalAlpha = Math.min(1, n.life);
     money.translate(n.x, n.y);
     money.rotate(n.rot);
-    money.scale(Math.cos(n.flip) * n.size, n.size);  // flutter: the note turns over as it falls
-    money.drawImage(NOTE, -60, -28);
+    money.scale((n.heavy ? 1 : Math.cos(n.flip)) * n.size, n.size);  // flutter: a note turns over as it falls
+    money.drawImage(img, -img.width / 2, -img.height / 2);
     money.restore();
   }
   if (!notes.length) money.clearRect(0, 0, innerWidth, innerHeight);
@@ -2686,6 +2905,449 @@ if (withShadows) {
   castShadows(scene);
 }
 
+// ---------- after a crew seals its file: THE HEIST HAS BEGUN ----------
+// alarm → hot air balloons lift off and rain cash → the vault's gold rises out of the courtyard →
+// the crew lines up in red jumpsuits and Dalí masks, firing money guns → the sealed file.
+// Everything here is drawn by us: no show footage, logos, photos or music.
+
+const sfx = (() => {                                // a tiny synth: the alarm and the money-gun pops (no audio files)
+  let ctx = null, master = null, on = true;
+  try { on = localStorage.getItem('heist-sound') !== 'off'; } catch {}
+  function unlock() {
+    try {
+      if (!ctx) {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        master = ctx.createGain();
+        master.gain.value = on ? .5 : 0;
+        master.connect(ctx.destination);
+      }
+      if (ctx.state === 'suspended') ctx.resume();
+    } catch { ctx = null; }
+    return ctx;
+  }
+  function siren(seconds) {
+    const c = unlock();
+    if (!c || !on) return;
+    const t0 = c.currentTime, osc = c.createOscillator(), lp = c.createBiquadFilter(), g = c.createGain();
+    osc.type = 'sawtooth';
+    lp.type = 'lowpass';
+    lp.frequency.value = 1600;
+    for (let k = 0; k * .66 < seconds; k++) {          // two-tone wail
+      const at = t0 + k * .66;
+      osc.frequency.setValueAtTime(600, at);
+      osc.frequency.linearRampToValueAtTime(920, at + .33);
+      osc.frequency.linearRampToValueAtTime(600, at + .66);
+    }
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(.13, t0 + .06);
+    g.gain.setValueAtTime(.13, t0 + seconds - .35);
+    g.gain.linearRampToValueAtTime(0, t0 + seconds);
+    osc.connect(lp).connect(g).connect(master);
+    osc.start(t0);
+    osc.stop(t0 + seconds + .05);
+  }
+  function pop() {
+    const c = unlock();
+    if (!c || !on) return;
+    const buf = c.createBuffer(1, Math.floor(c.sampleRate * .16), c.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length) ** 3;
+    const src = c.createBufferSource(), bp = c.createBiquadFilter(), g = c.createGain();
+    src.buffer = buf;
+    bp.type = 'bandpass';
+    bp.frequency.value = 700 + Math.random() * 500;
+    g.gain.value = .45;
+    src.connect(bp).connect(g).connect(master);
+    src.start();
+  }
+  function horn() {                                 // a megaphone "bwaap"
+    const c = unlock();
+    if (!c || !on) return;
+    const t0 = c.currentTime, osc = c.createOscillator(), bp = c.createBiquadFilter(), g = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(320, t0);
+    osc.frequency.linearRampToValueAtTime(260, t0 + .24);
+    bp.type = 'bandpass';
+    bp.frequency.value = 1300;
+    bp.Q.value = 1.4;
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(.16, t0 + .02);
+    g.gain.linearRampToValueAtTime(0, t0 + .26);
+    osc.connect(bp).connect(g).connect(master);
+    osc.start(t0);
+    osc.stop(t0 + .3);
+  }
+  return {
+    unlock, siren, pop, horn,
+    get on() { return on; },
+    set on(v) {
+      on = v;
+      if (master) master.gain.value = v ? .5 : 0;
+      try { localStorage.setItem('heist-sound', v ? 'on' : 'off'); } catch {}
+    },
+  };
+})();
+
+const GOLD = (() => {                               // a flying gold bar for the vault burst
+  const c = document.createElement('canvas');
+  c.width = 96;
+  c.height = 44;
+  const g = c.getContext('2d');
+  const shine = g.createLinearGradient(0, 4, 0, 40);
+  shine.addColorStop(0, '#fff3b0');
+  shine.addColorStop(.45, '#ffc21a');
+  shine.addColorStop(1, '#a86f00');
+  g.fillStyle = shine;
+  g.beginPath();
+  g.moveTo(18, 4); g.lineTo(78, 4); g.lineTo(93, 40); g.lineTo(3, 40);
+  g.closePath();
+  g.fill();
+  g.strokeStyle = '#7a5200';
+  g.lineWidth = 2;
+  g.stroke();
+  g.fillStyle = 'rgba(255,255,255,.6)';
+  g.fillRect(22, 8, 52, 4);
+  return c;
+})();
+
+function drawMustache(g, cx, cy, s) {               // the upturned, waxed mustache: our own heist mark
+  g.save();
+  g.translate(cx, cy);
+  g.scale(s, s);
+  g.fillStyle = '#1a1a1a';
+  for (const side of [-1, 1]) {
+    g.save();
+    g.scale(side, 1);
+    g.beginPath();
+    g.moveTo(0, -3);
+    g.bezierCurveTo(8, -9, 18, -7, 24, -5);
+    g.bezierCurveTo(29, -4, 30, -10, 27, -17);       // the tip sweeps up
+    g.bezierCurveTo(26, -21, 29, -24, 31, -22);      // and curls
+    g.bezierCurveTo(35, -16, 33, -2, 25, 1);
+    g.bezierCurveTo(17, 4, 8, 4, 0, 3);
+    g.closePath();
+    g.fill();
+    g.restore();
+  }
+  g.restore();
+}
+
+// hot air balloons: red and white gores with our mustache roundel, a basket, ropes and a burner flame
+const balloonTex = (() => {
+  const c = document.createElement('canvas');
+  c.width = 1024;
+  c.height = 512;
+  const g = c.getContext('2d');
+  const gores = 16;
+  for (let i = 0; i < gores; i++) {
+    g.fillStyle = i % 2 ? '#f4eee3' : '#d8141a';
+    g.fillRect(i * c.width / gores, 0, c.width / gores + 1, c.height);
+  }
+  g.fillStyle = '#1a1a1a';
+  g.fillRect(0, c.height * .9, c.width, c.height * .1);   // dark skirt around the mouth
+  for (const x of [c.width * .25, c.width * .75]) {       // a roundel on each side
+    g.fillStyle = '#f4eee3';
+    g.beginPath();
+    g.arc(x, c.height * .42, 70, 0, Math.PI * 2);
+    g.fill();
+    g.lineWidth = 8;
+    g.strokeStyle = '#1a1a1a';
+    g.stroke();
+    drawMustache(g, x, c.height * .45, 1.9);
+  }
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  return tex;
+})();
+const envelopeGeo = new THREE.LatheGeometry(
+  [[1, 0], [1.9, 1.3], [3.6, 3.4], [5.4, 5.9], [6.7, 8.5], [7.3, 11], [7.4, 12.8], [7, 14.6], [6, 16.2], [4.4, 17.4], [2.3, 18.1], [0, 18.3]]
+    .map(([r, y]) => new THREE.Vector2(r, y)), 36);
+const envelopeMat = new THREE.MeshStandardMaterial({ map: balloonTex, roughness: .8, side: THREE.DoubleSide });
+const basketMat = new THREE.MeshStandardMaterial({ color: 0x8a6440, roughness: 1 });
+const burnerMat = new THREE.MeshBasicMaterial({ color: 0xffb03a, transparent: true, opacity: .9 });
+const ropeMat = new THREE.LineBasicMaterial({ color: 0x2a2a2a });
+const BALLOONS = [                                  // orbit radius, start angle, cruise height, lift-off time, size
+  [48, .4, 60, 1.2, 1],
+  [92, 2.2, 76, 1.55, 1.15],
+  [30, 3.8, 48, 1.9, .9],
+  [108, 4.9, 86, 2.25, 1.2],
+  [70, 5.9, 68, 2.6, 1],
+];
+const balloons = BALLOONS.map(([r, a0, cruise, delay, size]) => {
+  const g = new THREE.Group();
+  const envelope = new THREE.Mesh(envelopeGeo, envelopeMat);
+  const basket = new THREE.Mesh(new THREE.BoxGeometry(1.9, 1.3, 1.9), basketMat);
+  basket.position.y = -3.4;
+  const flame = new THREE.Mesh(new THREE.ConeGeometry(.45, 1.8, 8), burnerMat);
+  flame.position.y = -1.4;
+  const ropes = [];
+  for (const [x, z] of [[-.85, -.85], [.85, -.85], [.85, .85], [-.85, .85]]) ropes.push(new THREE.Vector3(x, -2.75, z), new THREE.Vector3(x * .75, .2, z * .75));
+  g.add(envelope, basket, flame, new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(ropes), ropeMat));
+  if (withShadows) envelope.castShadow = basket.castShadow = true;
+  g.visible = false;
+  scene.add(g);
+  return { g, flame, r, a0, cruise, delay, size, acc: 0 };
+});
+
+// a column of gold light over the courtyard while the vault rises
+const beamMat = new THREE.MeshBasicMaterial({ color: 0xffc21a, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+const beam = new THREE.Mesh(new THREE.CylinderGeometry(10, 4, 90, 32, 1, true), beamMat);
+if (vaultGroup) beam.position.set(vaultGroup.position.x, 45, vaultGroup.position.z);
+beam.visible = false;
+scene.add(beam);
+
+// one crew member: red hooded jumpsuit, Dalí-style mask, a green toy money gun (not a real weapon)
+const FIGURE_BODY = `
+  <ellipse cx="100" cy="322" rx="56" ry="7" fill="rgba(0,0,0,.35)"/>
+  <path d="M70 212 L66 302 L95 302 L99 222 Z M101 222 L105 302 L134 302 L130 212 Z" fill="#a5170f"/>
+  <rect x="60" y="296" width="37" height="17" rx="6" fill="#161616"/>
+  <rect x="103" y="296" width="37" height="17" rx="6" fill="#161616"/>
+  <path d="M60 124 Q100 106 140 124 L148 214 Q100 229 52 214 Z" fill="#c8201a"/>
+  <rect x="67" y="144" width="21" height="16" rx="2" fill="#b01b15"/>
+  <rect x="112" y="144" width="21" height="16" rx="2" fill="#b01b15"/>
+  <path d="M100 122 V198" stroke="#8f1410" stroke-width="3"/>
+  <rect x="53" y="196" width="94" height="10" rx="3" fill="#8f1410"/>
+  <rect x="93" y="196" width="14" height="10" fill="#d9b24c"/>
+  <path d="M62 128 Q43 136 41 174 L39 202 Q39 210 47 210 Q55 210 55 202 L57 174 Q59 152 70 144 Z" fill="#b81d17"/>
+  <circle cx="47" cy="212" r="9" fill="#161616"/>
+  <path d="M58 86 Q56 28 100 24 Q144 28 142 86 Q144 118 124 130 L76 130 Q56 118 58 86 Z" fill="#b51c16"/>
+  <ellipse cx="100" cy="82" rx="37" ry="45" fill="#7d120d"/>
+  <ellipse cx="100" cy="84" rx="30" ry="40" fill="#eee0c4"/>
+  <path d="M83 51 Q100 45 117 51 M88 57 Q100 53 112 57" stroke="#cdb994" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <path d="M73 67 Q83 52 96 63 M104 63 Q117 52 127 67" stroke="#18120d" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="87" cy="74" rx="7.8" ry="6.8" fill="#fbf7ee" stroke="#2b2119" stroke-width="1.8"/>
+  <ellipse cx="113" cy="74" rx="7.8" ry="6.8" fill="#fbf7ee" stroke="#2b2119" stroke-width="1.8"/>
+  <circle cx="87.5" cy="74.5" r="3.6" fill="#141414"/>
+  <circle cx="112.5" cy="74.5" r="3.6" fill="#141414"/>
+  <path d="M97 70 Q94 86 93 92 Q100 97 107 92 Q106 86 103 70 Z" fill="#e3d1ae"/>
+  <path d="M97 72 Q94 86 93 92 Q100 97 107 92" stroke="#a4855f" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <circle cx="79" cy="95" r="6.5" fill="#e8998a" opacity=".35"/>
+  <circle cx="121" cy="95" r="6.5" fill="#e8998a" opacity=".35"/>
+  <path d="M100 99 Q91 97 86 100 Q80 103 80 95 Q80 86 89 82 M100 99 Q109 97 114 100 Q120 103 120 95 Q120 86 111 82" stroke="#141414" stroke-width="2.7" fill="none" stroke-linecap="round"/>
+  <path d="M91 108 Q100 112 109 108" stroke="#8a3a2e" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M96 119 Q100 121.5 104 119" stroke="#c7aa82" stroke-width="1.4" fill="none"/>
+  <path d="M140 128 Q160 126 166 104 L172 78 Q174 69 166 67 Q158 65 156 73 L150 98 Q146 114 132 142 Z" fill="#b81d17"/>
+`;
+const MONEY_GUN = `
+  <g transform="translate(161 63) rotate(-32)">
+    <rect x="-2" y="2" width="13" height="22" rx="4" fill="#1c8a3a"/>
+    <rect x="-8" y="-16" width="50" height="24" rx="8" fill="#2bb24c"/>
+    <rect x="-8" y="-3" width="50" height="4" fill="#ffc21a"/>
+    <rect x="40" y="-21" width="14" height="34" rx="3" fill="#1c8a3a"/>
+    <rect x="46" y="-15" width="4" height="22" fill="#0f5a24"/>
+    <rect x="4" y="-30" width="28" height="12" fill="#cfdcb8" stroke="#5b7a47" stroke-width="2"/>
+    <rect x="9" y="-36" width="28" height="12" fill="#dbe6c6" stroke="#5b7a47" stroke-width="2"/>
+    <rect x="21" y="-32" width="4" height="4" fill="#DA1111"/>
+    <circle class="muzzle" cx="56" cy="-4" r="1" fill="none"/>
+  </g>
+  <circle cx="166" cy="68" r="9.5" fill="#161616"/>
+`;
+const MEGAPHONE = `
+  <g transform="translate(160 64) rotate(-22)">
+    <rect x="4" y="4" width="8" height="16" rx="3" fill="#2a2a2a"/>
+    <path d="M0 -6 L46 -20 L46 20 L0 6 Z" fill="#f4eee3"/>
+    <path d="M18 -11.5 L28 -14.5 L28 14.5 L18 11.5 Z" fill="#d8141a"/>
+    <ellipse cx="46" cy="0" rx="5" ry="20" fill="#d9d2c4" stroke="#bdb5a5" stroke-width="2"/>
+    <rect x="-8" y="-7" width="10" height="14" rx="3" fill="#2a2a2a"/>
+    <circle class="muzzle" cx="52" cy="0" r="1" fill="none"/>
+  </g>
+  <circle cx="166" cy="68" r="9.5" fill="#161616"/>
+`;
+const PAPERS = `<g transform="translate(26 194) rotate(-14)"><rect width="30" height="38" rx="1" fill="#f7f4ec" stroke="#cdc6b6"/><path d="M6 9 H24 M6 15 H24 M6 21 H24 M6 27 H18" stroke="#9a9384" stroke-width="1.6"/></g>`;
+const figureSVG = lead => `<svg viewBox="0 0 200 330" aria-hidden="true">${FIGURE_BODY}${lead ? PAPERS + MEGAPHONE : MONEY_GUN}</svg>`;
+
+const revealEl = $('reveal'), revealTitle = $('revealTitle'), revealCrew = $('revealCrew'), revealLead = $('revealLead');
+const revealShout = $('revealShout'), revealSound = $('revealSound');
+const REVEAL_SHOT = shot(...alongFace(175), 46, faceBearing, -6, 58);   // the whole campus, sky included
+const REVEAL_END = 9.4;
+const heist = { stage: 'off', t: 0, gold: 0, fired: new Set(), figs: [], shouts: [] };        // stage: off → reveal → after
+const heistV = new THREE.Vector3(), screenV = new THREE.Vector3();
+
+function member(person, data, cls = '', h = 1) {
+  const lead = person === data.leader;
+  return `<figure class="member-fig${lead ? ' lead' : ''}${cls}" style="--h:${h}">
+      ${figureSVG(lead)}
+      <figcaption><b>${splitName(person.codename || '???')}</b><small>${lead ? 'Leader' : 'Crew'} · ${escapeHtml(person.name.split(/\s+/)[0])}</small></figcaption>
+    </figure>`;
+}
+function crewFigures(data) {                        // the crew on the top step, split left and right around the leader
+  const left = data.members.slice(0, Math.ceil(data.members.length / 2)), right = data.members.slice(left.length), heights = [.97, 1.03, .95];
+  return `<div class="side">${left.map((p, i) => member(p, data, ' mirror', heights[i % 3])).join('')}</div>`
+       + `<div class="side">${right.map((p, i) => member(p, data, '', heights[(i + 1) % 3])).join('')}</div>`;
+}
+
+function shout(fig, round) {                        // the leader announces through the megaphone
+  const bell = fig.querySelector('.muzzle');
+  if (!bell || !fig.classList.contains('in')) return;
+  const r = bell.getBoundingClientRect();
+  revealShout.innerHTML = heist.shouts[round] || '';
+  revealShout.style.left = `${Math.max(12, Math.min(r.left + 6, innerWidth - revealShout.offsetWidth - 12))}px`;
+  revealShout.style.top = `${r.top - 4}px`;
+  revealShout.classList.remove('on');
+  void revealShout.offsetWidth;
+  revealShout.classList.add('on');
+  fig.classList.remove('fire');
+  void fig.offsetWidth;
+  fig.classList.add('fire');
+  sfx.horn();
+}
+
+function screenOf(world) {                          // a world point in CSS pixels, or null when off screen
+  const v = screenV.copy(world).project(camera);
+  if (v.z > 1 || Math.abs(v.x) > 1.15 || Math.abs(v.y) > 1.15) return null;
+  return [(v.x + 1) / 2 * innerWidth, (1 - v.y) / 2 * innerHeight];
+}
+
+function fireGun(fig) {
+  const muzzle = fig.querySelector('.muzzle');
+  if (!muzzle || !fig.classList.contains('in')) return;
+  const r = muzzle.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+  const dir = fig.classList.contains('mirror') ? -1 : 1;
+  for (let i = 0; i < 12 && notes.length < 450; i++) {
+    const n = newNote(x, y, dir * (220 + Math.random() * 480), -340 - Math.random() * 480, 2.4 + Math.random());
+    n.size *= .6;
+    notes.push(n);
+  }
+  fig.classList.remove('fire');
+  void fig.offsetWidth;                             // restart the kick
+  fig.classList.add('fire');
+  sfx.pop();
+}
+
+function goldBurst() {
+  if (!vaultGroup) return;
+  const p = screenOf(heistV.copy(vaultGroup.position).setY(vaultGroup.position.y + 3));
+  if (!p) return;
+  for (let i = 0; i < 56 && notes.length < 450; i++) {
+    const gold = i % 2 === 0;
+    const n = newNote(p[0] + (Math.random() - .5) * 60, p[1], (Math.random() - .5) * 1000, -420 - Math.random() * 700, gold ? 2.2 + Math.random() : 3 + Math.random());
+    if (gold) Object.assign(n, { img: GOLD, heavy: true, size: .4 + Math.random() * .3 });
+    else n.size *= .7;
+    notes.push(n);
+  }
+  sfx.pop();
+}
+
+function startHeist(data) {
+  document.body.classList.add('heist');             // the paper model turns to full colour
+  if (reduceMotion) { showStep(4); return; }
+  heist.stage = 'reveal';
+  heist.t = 0;
+  heist.fired.clear();
+  $('revealCrewName').textContent = data.crew.toUpperCase();
+  revealCrew.innerHTML = crewFigures(data);
+  revealLead.innerHTML = member(data.leader, data);
+  heist.figs = [...revealEl.querySelectorAll('.member-fig')];          // the crew first, the leader last
+  heist.shouts = [`<b>${escapeHtml(data.crew.toUpperCase())}</b> IS IN.`, 'NOBODY GETS HURT.', 'SEE YOU ON <b>23 SEPT</b>.'];
+  revealShout.classList.remove('on');
+  revealTitle.classList.remove('in', 'up');
+  revealEl.classList.remove('alarm', 'done', 'staged', 'handoff-on');
+  $('handoffTag').textContent = data.crewId;
+  $('handoffCrew').textContent = data.crew.toUpperCase();
+  revealEl.hidden = false;
+  void revealEl.offsetWidth;                        // restart the alarm flash
+  revealEl.classList.add('alarm');
+  revealSound.textContent = sfx.on ? 'SOUND ON' : 'SOUND OFF';
+  document.body.classList.add('revealing');
+  document.activeElement?.blur();
+  setCallouts([]);
+  flyTo(REVEAL_SHOT);
+  sfx.siren(2.6);
+}
+
+function finishHeist() {
+  if (heist.stage !== 'reveal') return;
+  heist.stage = 'after';
+  heist.t = Math.max(heist.t, REVEAL_END);         // a skip lands the balloons straight in their drift
+  revealEl.classList.add('done');
+  setTimeout(() => {
+    if (heist.stage === 'reveal') return;           // a new heist started meanwhile
+    revealEl.hidden = true;
+    revealEl.classList.remove('alarm', 'done', 'staged', 'handoff-on');
+    revealCrew.innerHTML = revealLead.innerHTML = '';
+    revealShout.classList.remove('on');
+  }, 650);
+  document.body.classList.remove('revealing');
+  showStep(4);
+  moneyRain(50);
+}
+
+function updateHeist(total, dt) {
+  if (heist.stage === 'off') return;
+  if (!heist.hold) heist.t += dt;
+  const T = heist.t, revealing = heist.stage === 'reveal';
+  const at = (key, time, fn) => {
+    if (revealing && T >= time && !heist.fired.has(key)) { heist.fired.add(key); fn(); }
+  };
+  at('title', .35, () => revealTitle.classList.add('in'));
+  at('titleUp', 3.0, () => revealTitle.classList.add('up'));
+  at('gold', 3.5, goldBurst);
+  at('steps', 3.55, () => revealEl.classList.add('staged'));
+  const figs = heist.figs;
+  for (let i = 0; i < figs.length; i++) {
+    const fig = figs[i], lead = fig.classList.contains('lead');
+    at('in' + i, 3.9 + i * .28, () => fig.classList.add('in'));
+    for (let round = 0; round < 3; round++) {
+      at(`fire${round}.${i}`, 5.0 + round * 1.15 + i * .16, () => (lead ? shout(fig, round) : fireGun(fig)));
+    }
+  }
+  at('handoff', REVEAL_END, () => {                // the crew slides a mask across the table: now you're one of us
+    revealEl.classList.add('handoff-on');
+    sfx.pop();
+    setTimeout(() => { if (heist.stage === 'reveal') $('handoffTake').focus({ preventScroll: true }); }, 2100);
+  });
+  at('auto', REVEAL_END + 14, finishHeist);          // nobody gets stuck if they don't press the button
+
+  // balloons lift off, climb, then drift slowly around the campus, raining cash while the news is fresh
+  const rate = (revealing && T < REVEAL_END ? 3.5 : Math.max(0, 3.5 * (1 - (T - REVEAL_END) / 3))) * (innerWidth < 768 ? .5 : 1);
+  for (const b of balloons) {
+    const grow = ease(phase(T, b.delay - .2, b.delay + .5)), climb = ease(phase(T, b.delay, b.delay + 3.4));
+    b.g.visible = grow > 0;
+    if (!b.g.visible) continue;
+    const ang = b.a0 + T * .016;
+    b.g.position.set(center.x + Math.cos(ang) * b.r,
+                     THREE.MathUtils.lerp(b.cruise - 36, b.cruise, climb) + Math.sin(total * .7 + b.a0 * 3) * 1.4,
+                     center.z + Math.sin(ang) * b.r);
+    b.g.scale.setScalar(b.size * Math.max(grow, .001));
+    b.g.rotation.set(Math.sin(total * .8 + b.a0) * .025, b.a0 + T * .05, Math.cos(total * .6 + b.a0) * .025);
+    b.g.updateMatrixWorld();
+    b.flame.visible = Math.random() > (T < REVEAL_END + 2 ? .25 : .96);   // the burner roars during the climb
+    b.flame.scale.y = .7 + Math.random() * .6;
+    b.acc += rate * dt;
+    for (; b.acc >= 1; b.acc--) {
+      if (notes.length > 400) continue;
+      const basket = b.g.localToWorld(heistV.set(0, -3.6, 0)), dist = camera.position.distanceTo(basket), p = screenOf(basket);
+      if (!p) continue;
+      const n = newNote(p[0] + (Math.random() - .5) * 24, p[1], (Math.random() - .5) * 150, 20 + Math.random() * 50, 4 + Math.random() * 2);
+      n.size *= THREE.MathUtils.clamp(60 / dist, .12, .34);        // far-away bills stay small
+      notes.push(n);
+    }
+  }
+
+  // the vault: its gold rises out of the courtyard in a column of light, and hovers while the sealed file is open
+  const target = (revealing && T > 1.6) || (!revealing && recruitStep === 4) ? 1 : 0;
+  heist.gold += (target - heist.gold) * (1 - Math.exp(-dt * 1.4));
+  const k = heist.gold;
+  if (vaultGroup) {
+    const up = k * k * (3 - 2 * k);
+    vaultGroup.position.y = 30 * up;
+    vaultGroup.rotation.y = k * Math.sin(total * .4) * .35;
+    vaultGroup.children[0].scale.setScalar(1 + .7 * up);          // the pile grows so it reads from the wide shot
+  }
+  goldMat.emissiveIntensity = 1 + 2.4 * k * (.85 + .15 * Math.sin(total * 5));
+  beamMat.opacity = .22 * k * (revealing ? 1 : .3);
+  beam.visible = beamMat.opacity > .004;
+}
+
+$('revealSkip').addEventListener('click', () => finishHeist());
+$('handoffTake').addEventListener('click', () => finishHeist());
+revealSound.addEventListener('click', () => {
+  sfx.on = !sfx.on;
+  revealSound.textContent = sfx.on ? 'SOUND ON' : 'SOUND OFF';
+});
+addEventListener('keydown', e => { if (e.key === 'Escape' && heist.stage === 'reveal') finishHeist(); });
+if (new URLSearchParams(location.search).has('dev')) window.heistDebug = heist;   // ?dev: freeze the show at a moment with heistDebug.hold = true
+
 // ---------- animation ----------
 function update(total, dt) {
   // A: site plan lines
@@ -2740,15 +3402,22 @@ function update(total, dt) {
 }
 
 let last = performance.now(), total = 0;
-renderer.setAnimationLoop(now => {
-  const dt = Math.min((now - last) / 1000, .1);
-  last = now; total += dt;
+function frame(dt) {
+  total += dt;
   if (t < END) t = Math.min(END, t + dt);
   update(total, dt);
+  updateHeist(total, dt);
   renderer.render(scene, camera);
   drawMoney(dt);
   if (callouts.length) placeCallouts();
+}
+renderer.setAnimationLoop(now => {
+  const dt = Math.min((now - last) / 1000, .1);
+  last = now;
+  frame(dt);
 });
+// ?dev: play N seconds of frames on demand (for previews where the page isn't on screen)
+if (window.heistDebug) window.heistDebug.frames = (seconds, fps = 30) => { for (let k = 0; k < seconds * fps; k++) frame(1 / fps); };
 </script>
 </body>
 </html>
