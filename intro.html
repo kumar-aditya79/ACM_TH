@@ -2177,10 +2177,20 @@ $('panoBtn').addEventListener('click', () =>
 const CREW_MIN = 1, CREW_MAX = 4;                 // 1 leader + up to 3 members = max 4
 const REGISTRATION_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwuk661BYQ6zNfbmPEfDOaZ0w7tWJKiQ1VREOICYhlRXLqtzXl02p9oxbeyv5mU8yMI6Q/exec';
 const DEV_MODE = new URLSearchParams(location.search).has('dev');   // ?dev = someone testing: no validation, pre-filled crew, nothing sent                 // TODO(ACM): URL that stores registrations (e.g. a Google Apps Script web app)
-const BRANCHES = ['Computer Engineering', 'Computer Science & Engineering', 'Information Technology', 'AI & Data Science',
-                  'AI & Machine Learning', 'Electronics & Telecommunication', 'Electrical Engineering', 'Mechanical Engineering',
-                  'Civil Engineering', 'MBA', 'MCA', 'Other'];
-const YEARS = ['First year', 'Second year', 'Third year', 'Final year', 'Postgraduate'];
+const BRANCHES = [
+  'Computer Science',
+  'Information Technology',
+  'Artificial Intelligence (AI)',
+  'Artificial Intelligence & Machine Learning (AI/ML)',
+  'Data Science',
+  'Cyber Security',
+  'Electronics & Communication',
+  'Electrical Engineering',
+  'Mechanical Engineering',
+  'Civil Engineering',
+  'Other'
+];
+const YEARS = ['First Year', 'Second Year', 'Third Year', 'Final Year'];
 
 
 const SCENE_NAMES = ['SCENE 01 · THE GATE', 'SCENE 02 · THE ENTRANCE', 'SCENE 03 · THE COURTYARD', 'SCENE 04 · OVER THE TURF', 'SCENE 05 · TARGET LOCKED'];
@@ -2326,7 +2336,7 @@ $('addMember').addEventListener('click', () => {
       flyTo(SHOTS[2]);
       setCallouts(stepCallouts(2));
     }
-    card.querySelector('input').focus();
+    if (innerWidth >= 768) card.querySelector('input').focus(); else document.activeElement?.blur();
     saveDraft();
   }
 });
@@ -2523,7 +2533,7 @@ function openRecruit() {
   document.body.classList.add('recruiting');
   form.hidden = false;
   showStep(0);
-  form.elements.crew.focus({ preventScroll: true });
+  document.activeElement?.blur();
 }
 
 function closeRecruit() {
