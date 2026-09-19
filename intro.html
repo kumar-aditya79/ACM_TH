@@ -1876,9 +1876,7 @@ function tickCountdown() {
 tickCountdown();
 setInterval(tickCountdown, 1000);
 
-let seen = false;
-try { seen = localStorage.getItem('heist-intro-seen') === '1'; } catch {}
-let t = reduceMotion || seen ? END : 0;
+let t = reduceMotion ? END : 0;
 
 ctrl.addEventListener('click', () => {
   t = t < END ? END : 0;
@@ -2807,6 +2805,12 @@ function stopHeistAudio() {
   sfx.stopLoopingSiren();
 }
 
+window.addEventListener('pagehide', stopHeistAudio);
+window.addEventListener('beforeunload', stopHeistAudio);
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stopHeistAudio();
+});
+
 const sfx = (() => {                                // a tiny synth: the alarm and the money-gun pops (no audio files)
   let ctx = null, master = null, on = true;
   let sirenOsc = null, sirenGain = null, sirenInterval = null;
@@ -3320,7 +3324,6 @@ function update(total, dt) {
                        : t < 1.8 ? 'DRAWING SITE PLAN…' : t < 4.4 ? 'BUILDING MODEL…'
                        : t < 6.0 ? 'PLOTTING ROUTE…' : 'TARGET LOCKED';
   ctrl.textContent = done ? '↺ REPLAY' : 'SKIP ▸';
-  if (done) { try { localStorage.setItem('heist-intro-seen', '1'); } catch {} }
 
   placeCamera(t, total, dt);
 }
