@@ -334,7 +334,9 @@
   }
 
   @media (max-width:767px) {
-    .recruit { left:0; right:0; top:auto; bottom:0; width:auto; max-height:68vh; border-radius:18px 18px 0 0; }
+    .recruit { left:0; right:0; top:auto; bottom:0; width:auto; max-height:68vh; border-radius:18px 18px 0 0;
+               transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease; will-change: transform; }
+    body.flying-camera .recruit { transform: translateY(115%); opacity: 0; pointer-events: none; }
     .recruit h2 { font-size:40px; }
     .two { grid-template-columns:1fr; }
     body.recruiting .tl { display:none; }          /* leave the small screen to the scene and its labels */
@@ -2228,6 +2230,12 @@ function placeFlightCamera(dt) {
   else if (w >= 768) camera.setViewOffset(w, h, -Math.min(480, w * .42) / 2, 0, w, h);
   else camera.setViewOffset(w, h, 0, h * .22, w, h);
   camera.updateProjectionMatrix();
+
+  if (flight.t >= flight.dur) {
+    document.body.classList.remove('flying-camera');
+  } else {
+    document.body.classList.add('flying-camera');
+  }
 }
 
 // red credit-style labels, like the names in the show's intro: a dot on a place in the scene, a thin line, a name
@@ -2303,6 +2311,10 @@ function addMember(id = nextMemberId) {
     card.remove();
     memberIds = memberIds.filter(m => m !== id);
     refreshCrew();
+    if (recruitStep === 2) {
+      flyTo(SHOTS[2]);
+      setCallouts(stepCallouts(2));
+    }
     saveDraft();
   });
   memberIds.push(id);
@@ -2312,6 +2324,10 @@ function addMember(id = nextMemberId) {
 $('addMember').addEventListener('click', () => {
   const card = addMember();
   if (card) {
+    if (recruitStep === 2) {
+      flyTo(SHOTS[2]);
+      setCallouts(stepCallouts(2));
+    }
     card.querySelector('input').focus();
     saveDraft();
   }
