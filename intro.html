@@ -46,7 +46,10 @@
   .tl .status { color:var(--red); }
   .br { bottom:12px; right:16px; text-align:right; pointer-events:auto; }
   .br a { color:#6f6f6f; }
-  .top-nav { position:fixed; top:14px; right:16px; display:flex; gap:8px; z-index:10; }
+  .views-bottom-btn { position:fixed; bottom:16px; right:16px; z-index:100; box-shadow:0 4px 16px rgba(0,0,0,0.6); }
+  @media (max-width:767px) {
+    .views-bottom-btn { bottom:12px; right:12px; }
+  }
   .ctrl { background:rgba(20,20,20,.75); color:#bbb; border:1px solid #444;
           font:12px 'Roboto Mono', monospace; letter-spacing:.12em; padding:8px 14px; cursor:pointer;
           border-radius:4px; backdrop-filter:blur(4px); }
@@ -355,10 +358,10 @@
   <span class="status" id="status">DRAWING SITE PLAN…</span>
 </div>
 <div class="top-nav">
-  <button class="ctrl" id="viewsBtn" type="button">VIEWS</button>
   <button class="ctrl" id="camBtn">SET CAMERA</button>
   <button class="ctrl" id="ctrl">SKIP ▸</button>
 </div>
+<button class="ctrl views-bottom-btn" id="viewsBtn" type="button">VIEWS</button>
 <div class="campanel" id="campanel" hidden>
   <p><b>1</b> On the map, press where you stood and drag toward what you photographed.</p>
   <button class="ghost" id="gateBtn">GO TO ARCH GATE VIEW</button>
@@ -3293,11 +3296,8 @@ let visitCount = 0;
 function initVisitCounter() {
   try {
     let localVisits = parseInt(localStorage.getItem('heist_total_visits') || '0', 10);
-    if (!sessionStorage.getItem('heist_session_tracked')) {
-      localVisits += 1;
-      localStorage.setItem('heist_total_visits', localVisits.toString());
-      sessionStorage.setItem('heist_session_tracked', 'true');
-    }
+    localVisits += 1;
+    localStorage.setItem('heist_total_visits', localVisits.toString());
     visitCount = localVisits;
 
     if (REGISTRATION_ENDPOINT && !DEV_MODE) {
@@ -3313,7 +3313,7 @@ function initVisitCounter() {
       }).catch(() => {});
     }
   } catch (e) {
-    visitCount = Math.max(visitCount, 1);
+    visitCount = 1;
   }
 }
 initVisitCounter();
