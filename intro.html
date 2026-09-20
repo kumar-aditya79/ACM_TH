@@ -355,6 +355,7 @@
   <span class="status" id="status">DRAWING SITE PLAN…</span>
 </div>
 <div class="top-nav">
+  <button class="ctrl" id="viewsBtn" type="button">VIEWS</button>
   <button class="ctrl" id="camBtn">SET CAMERA</button>
   <button class="ctrl" id="ctrl">SKIP ▸</button>
 </div>
@@ -3285,6 +3286,50 @@ revealSound.addEventListener('click', () => {
 });
 addEventListener('keydown', e => { if (e.key === 'Escape' && heist.stage === 'reveal') finishHeist(); });
 if (new URLSearchParams(location.search).has('dev')) window.heistDebug = heist;   // ?dev: freeze the show at a moment with heistDebug.hold = true
+
+// ---------- Website Visit Counter & Password Protected Views Button ----------
+let visitCount = 0;
+
+function initVisitCounter() {
+  try {
+    let localVisits = parseInt(localStorage.getItem('heist_total_visits') || '0', 10);
+    if (!sessionStorage.getItem('heist_session_tracked')) {
+      localVisits += 1;
+      localStorage.setItem('heist_total_visits', localVisits.toString());
+      sessionStorage.setItem('heist_session_tracked', 'true');
+    }
+    visitCount = localVisits;
+
+    if (REGISTRATION_ENDPOINT && !DEV_MODE) {
+      fetch(REGISTRATION_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'visit' })
+      }).then(r => r.json()).then(res => {
+        if (res && res.totalVisits) {
+          visitCount = Math.max(visitCount, parseInt(res.totalVisits, 10));
+          localStorage.setItem('heist_total_visits', visitCount.toString());
+        }
+      }).catch(() => {});
+    }
+  } catch (e) {
+    visitCount = Math.max(visitCount, 1);
+  }
+}
+initVisitCounter();
+
+const viewsBtn = $('viewsBtn');
+if (viewsBtn) {
+  viewsBtn.addEventListener('click', () => {
+    const password = prompt("Enter password to view website visits:");
+    if (password === null) return;
+    if (password.trim() === "123321") {
+      alert(`👁 WEBSITE ANALYTICS\n\nTotal Website Visits: ${visitCount}`);
+    } else {
+      alert("❌ Incorrect Password!");
+    }
+  });
+}
 
 // ---------- animation ----------
 function update(total, dt) {
