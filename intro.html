@@ -116,6 +116,7 @@
   .hero-actions { display:flex; flex-wrap:wrap; gap:12px; }
   .btn.ghost-btn { background:transparent; border:1px solid #666; cursor:pointer; }
   .btn.ghost-btn:hover { border-color:#fff; background:rgba(255,255,255,.06); }
+  .btn.community-btn:hover { border-color:#25D366; color:#25D366; background:rgba(37,211,102,.1); }
 
   /* the Professors: this year's leads pinned to the planning board, red string to the target (the Professor's board) */
   .cast { position:fixed; inset:0; z-index:6; overflow-x:hidden; overflow-y:auto;
@@ -195,6 +196,8 @@
           padding:11px 18px; cursor:pointer; }
   .pill:hover { background:var(--red-dark); }
   .pill.ghost { background:transparent; border:1px solid #444; color:#ddd; }
+  .pill.whatsapp-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; background:#25D366; color:#fff; text-decoration:none; margin-top:10px; width:100%; text-align:center; box-sizing:border-box; }
+  .pill.whatsapp-btn:hover { background:#1da851; }
   .pill:disabled { opacity:.6; cursor:wait; }
   .form-error { position:relative; color:#ff6b6b; font-size:14px; margin:0; padding:0 24px; min-height:20px; }
   .form-nav { position:relative; display:flex; justify-content:space-between; gap:10px; padding:10px 24px 20px; }
@@ -394,6 +397,7 @@
   <div class="hero-actions">
     <a class="btn" href="#register" id="joinBtn">JOIN THE CREW</a>
     <button class="btn ghost-btn" type="button" id="castBtn">MEET THE PROFESSORS</button>
+    <a class="btn ghost-btn community-btn" href="https://chat.whatsapp.com/I0agrWAHRxF7XJnVUAH4il?s=cl&amp;p=a&amp;mlu=4&amp;ilr=4" target="_blank" rel="noopener noreferrer" id="communityBtn">JOIN COMMUNITY</a>
   </div>
 </div>
 
@@ -460,7 +464,8 @@
       <h2>WELCOME TO THE <span class="r">CREW</span></h2>
       <p class="crew-id" id="crewId"></p>
       <ul class="checklist masks" id="sealedList"></ul>
-      <button type="button" class="pill" id="shareBtn">SHARE WITH YOUR CREW ▸</button>
+      <button type="button" class="pill" id="shareBtn" style="width:100%">SHARE WITH YOUR CREW ▸</button>
+      <a href="https://chat.whatsapp.com/I0agrWAHRxF7XJnVUAH4il?s=cl&amp;p=a&amp;mlu=4&amp;ilr=4" target="_blank" rel="noopener noreferrer" class="pill whatsapp-btn" id="waBtn">JOIN WHATSAPP COMMUNITY ▸</a>
       <p class="note">Take a screenshot. Bring your Crew ID on 23 September.</p>
     </section>
   </div>
