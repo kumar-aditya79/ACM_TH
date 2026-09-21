@@ -2521,7 +2521,13 @@ function setUpiAccount(index) {
   const btn1 = $('qrBtn1'), btn2 = $('qrBtn2');
   if (nameEl) nameEl.textContent = acc.name;
   if (upiEl) upiEl.textContent = acc.id;
-  if (qrImg) qrImg.src = acc.qr;
+  if (qrImg) {
+    qrImg.src = acc.qr;
+    qrImg.onerror = () => {
+      qrImg.onerror = null;
+      qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data=' + encodeURIComponent(acc.link);
+    };
+  }
   if (linkEl) linkEl.href = acc.link;
   if (btn1) btn1.classList.toggle('active', activeUpiIndex === 0);
   if (btn2) btn2.classList.toggle('active', activeUpiIndex === 1);
