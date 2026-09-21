@@ -223,10 +223,17 @@
   .payment-payee { font-size:12px; color:#aaa; text-align:right; }
   .payment-payee b { color:#fff; display:block; font-size:13px; margin-top:2px; }
   .qr-container { text-align:center; padding:12px; background:#0d0d0d; border-radius:10px; border:1px solid #222; margin-bottom:16px; }
-  .qr-code { width:160px; height:160px; border-radius:8px; border:4px solid #fff; background:#fff; display:inline-block; }
+  .qr-code { width:180px; max-width:100%; height:auto; max-height:240px; border-radius:8px; border:4px solid #fff; background:#fff; display:inline-block; object-fit:contain; }
   .qr-hint { font-size:12px; color:#888; margin:8px 0 10px; }
   .upi-app-btn { display:inline-block; background:#242424; color:#fff; border:1px solid #444; border-radius:6px; font:500 13px Oswald, sans-serif; letter-spacing:.08em; padding:8px 14px; text-decoration:none; margin-bottom:4px; }
-  .upi-app-btn:hover { background:var(--red); border-color:var(--red); }
+  .qr-switcher { display:flex; gap:8px; margin-bottom:12px; }
+  .qr-switch-btn { flex:1; background:#202020; color:#aaa; border:1px solid #383838; border-radius:6px; padding:7px 10px; font:500 12px 'Roboto Mono', monospace; cursor:pointer; transition:all .2s; }
+  .qr-switch-btn.active { background:var(--red); color:#fff; border-color:var(--red); font-weight:700; }
+  .qr-switch-btn:hover:not(.active) { border-color:#666; color:#fff; }
+  .qr-swap-notice { margin-top:12px; padding:10px; background:rgba(255,255,255,.04); border:1px dashed #444; border-radius:8px; font-size:12px; color:#ccc; display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .qr-swap-notice span { font-size:11px; color:#e09a36; text-align:center; }
+  .qr-swap-action-btn { background:#2a2a2a; color:#fff; border:1px solid #555; border-radius:5px; font:500 12px Oswald, sans-serif; letter-spacing:.08em; padding:6px 14px; cursor:pointer; transition:all .2s; }
+  .qr-swap-action-btn:hover { background:var(--red); border-color:var(--red); }
   .field-hint { display:block; font-size:11px; color:#777; margin-top:4px; }
 
 
@@ -470,13 +477,23 @@
             <span class="payment-tag">REGISTRATION FEE</span>
             <div class="payment-amount">₹49 <small>/ crew</small></div>
           </div>
-          <div class="payment-payee">Payee: <b>Kumar Aditya Singh</b><span class="field-hint">kumar79adityajee@okicici</span></div>
+          <div class="payment-payee">Payee: <b id="payeeName">Kumar Aditya Singh</b><span class="field-hint" id="payeeUpi">kumar79adityajee@okicici</span></div>
+        </div>
+
+        <div class="qr-switcher">
+          <button type="button" class="qr-switch-btn active" id="qrBtn1">QR 1 (Primary)</button>
+          <button type="button" class="qr-switch-btn" id="qrBtn2">QR 2 (Backup)</button>
         </div>
         
         <div class="qr-container">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;data=upi%3A%2F%2Fpay%3Fpa%3Dkumar79adityajee%40okicici%26pn%3DKumar%2520Aditya%2520Singh%26am%3D49%26cu%3DINR" alt="UPI QR Code" class="qr-code">
-          <p class="qr-hint">Scan & Pay via Any UPI App</p>
-          <a href="upi://pay?pa=kumar79adityajee@okicici&amp;pn=Kumar%20Aditya%20Singh&amp;am=49&amp;cu=INR" class="upi-app-btn">PAY ₹49 VIA UPI APP ▸</a>
+          <img id="qrImg" src="qr_kumar.png" alt="UPI QR Code" class="qr-code">
+          <p class="qr-hint">Scan &amp; Pay via Any UPI App</p>
+          <a id="upiPayLink" href="upi://pay?pa=kumar79adityajee@okicici&amp;pn=Kumar%20Aditya%20Singh&amp;am=49&amp;cu=INR" class="upi-app-btn">PAY ₹49 VIA UPI APP ▸</a>
+          
+          <div class="qr-swap-notice">
+            <span>⚠️ If this QR is not working:</span>
+            <button type="button" class="qr-swap-action-btn" id="swapQrActionBtn">🔄 SWAP &amp; USE ANOTHER QR</button>
+          </div>
         </div>
 
         <label class="field">
@@ -2478,6 +2495,41 @@ function readCrew() {
 const crewList = data => [data.leader, ...data.members].map((person, i) => `
   <li><div><b>${escapeHtml(person.name)}</b>
   <small>${i ? 'Member' : 'Leader'} · ${escapeHtml(person.branch)} · ${escapeHtml(person.year)} · ${escapeHtml(person.phone)}</small></div></li>`).join('');
+
+// ---------- Multi-UPI QR Swapper (Primary: Kumar Aditya Singh, Backup: Sanika Bavaskar) ----------
+const UPI_ACCOUNTS = [
+  {
+    name: 'Kumar Aditya Singh',
+    id: 'kumar79adityajee@okicici',
+    qr: 'qr_kumar.png',
+    link: 'upi://pay?pa=kumar79adityajee@okicici&pn=Kumar%20Aditya%20Singh&am=49&cu=INR'
+  },
+  {
+    name: 'Sanika Sunil Bavaskar',
+    id: '9408448222@yapl',
+    qr: 'qr_sanika.png',
+    link: 'upi://pay?pa=9408448222@yapl&pn=Sanika%20Sunil%20Bavaskar&am=49&cu=INR'
+  }
+];
+
+let activeUpiIndex = 0;
+
+function setUpiAccount(index) {
+  activeUpiIndex = index % UPI_ACCOUNTS.length;
+  const acc = UPI_ACCOUNTS[activeUpiIndex];
+  const nameEl = $('payeeName'), upiEl = $('payeeUpi'), qrImg = $('qrImg'), linkEl = $('upiPayLink');
+  const btn1 = $('qrBtn1'), btn2 = $('qrBtn2');
+  if (nameEl) nameEl.textContent = acc.name;
+  if (upiEl) upiEl.textContent = acc.id;
+  if (qrImg) qrImg.src = acc.qr;
+  if (linkEl) linkEl.href = acc.link;
+  if (btn1) btn1.classList.toggle('active', activeUpiIndex === 0);
+  if (btn2) btn2.classList.toggle('active', activeUpiIndex === 1);
+}
+
+$('qrBtn1')?.addEventListener('click', () => setUpiAccount(0));
+$('qrBtn2')?.addEventListener('click', () => setUpiAccount(1));
+$('swapQrActionBtn')?.addEventListener('click', () => setUpiAccount(activeUpiIndex === 0 ? 1 : 0));
 
 function getScreenshotData() {
   const fileInput = $('utrProof');
