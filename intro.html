@@ -338,6 +338,102 @@
   .reveal-tools .ctrl { position:static; background:rgba(10,10,10,.55); }
   .checklist.masks li::before { content:''; width:28px; height:28px; border-radius:50%;
     background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23b51c16'/%3E%3Cellipse cx='20' cy='21.5' rx='11.5' ry='14.5' fill='%23eee0c4'/%3E%3Cpath d='M11 15 Q14.5 10 18.5 13.5 M21.5 13.5 Q25.5 10 29 15' stroke='%2318120d' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15.5' cy='17.5' r='2.7' fill='%23fbf7ee' stroke='%232b2119' stroke-width='.8'/%3E%3Ccircle cx='24.5' cy='17.5' r='2.7' fill='%23fbf7ee' stroke='%232b2119' stroke-width='.8'/%3E%3Ccircle cx='15.6' cy='17.7' r='1.3' fill='%23141414'/%3E%3Ccircle cx='24.4' cy='17.7' r='1.3' fill='%23141414'/%3E%3Cpath d='M20 26.5 Q16.5 25.8 15 27 Q12.5 28 12.5 24.5 Q12.5 21.5 15.5 20.5 M20 26.5 Q23.5 25.8 25 27 Q27.5 28 27.5 24.5 Q27.5 21.5 24.5 20.5' stroke='%23141414' stroke-width='1.3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat; }
+
+  /* ---------- Vault Full / Registrations Closed Modal ---------- */
+  .vault-closed {
+    position: fixed;
+    inset: 0;
+    z-index: 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.55) 100%);
+    overflow-y: auto;
+  }
+  .vault-closed[hidden] { display: none; }
+  .vault-closed-card {
+    position: relative;
+    width: min(520px, 94vw);
+    background: rgba(16, 16, 16, 0.92);
+    border: 1px solid #4a1818;
+    border-radius: 18px;
+    padding: clamp(22px, 4.5vw, 34px);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 30px rgba(218, 17, 17, 0.25);
+    text-align: center;
+    overflow: hidden;
+    animation: cardPop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes cardPop {
+    from { opacity: 0; transform: scale(0.92) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .closed-stamp {
+    display: inline-block;
+    border: 2px solid var(--red);
+    color: var(--red);
+    font: 700 13px 'Roboto Mono', monospace;
+    letter-spacing: 0.22em;
+    padding: 6px 16px;
+    border-radius: 4px;
+    transform: rotate(-2deg);
+    margin: 12px 0 16px;
+    background: rgba(218, 17, 17, 0.09);
+    box-shadow: 0 0 16px rgba(218, 17, 17, 0.3);
+  }
+  .vault-closed h2 {
+    font: 700 clamp(42px, 7.5vw, 70px)/0.92 Oswald, Impact, sans-serif;
+    margin: 8px 0 12px;
+    color: #fff;
+    letter-spacing: 0.02em;
+  }
+  .vault-closed .lead-highlight {
+    font-size: 16px;
+    color: #eee;
+    font-weight: 500;
+    margin: 0 0 16px;
+    line-height: 1.45;
+  }
+  .closed-poem {
+    background: rgba(255, 255, 255, 0.035);
+    border-left: 3px solid var(--red);
+    padding: 14px 18px;
+    margin: 16px 0 22px;
+    text-align: left;
+    border-radius: 0 8px 8px 0;
+  }
+  .closed-poem p {
+    font: 400 15px/1.6 'Roboto Mono', monospace;
+    color: #ccc;
+    margin: 4px 0;
+  }
+  .closed-poem .dramatic-line {
+    color: #ff4d4d;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+  .closed-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .vault-closed-sound {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid #444;
+    color: #aaa;
+    font: 500 11px 'Roboto Mono', monospace;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .vault-closed-sound:hover {
+    color: #fff;
+    border-color: #888;
+  }
   @media (max-width:767px) {
     .reveal-title.up { top:15%; transform:translate(-50%, -50%) scale(.6); }
     .member-fig figcaption small { font-size:8px; padding:1px 4px; }
@@ -527,6 +623,29 @@
     </div>
   </div>
 </form>
+
+<section class="vault-closed" id="vaultClosedModal" hidden aria-label="Registration Closed">
+  <div class="vault-closed-card">
+    <div class="recruit-bg" aria-hidden="true">THE VAULT IS FULL THE VAULT IS FULL THE VAULT IS FULL</div>
+    <button class="vault-closed-sound" id="vaultSoundBtn" type="button">SOUND ON</button>
+    <div class="kicker">SECURITY PROTOCOL <i></i> MAXIMUM CAPACITY REACHED</div>
+    <h2>THE VAULT IS <span class="r">FULL</span>.</h2>
+    <div><span class="closed-stamp">REGISTRATIONS CLOSED</span></div>
+    
+    <p class="lead-highlight">All spots have been claimed. Registrations are officially closed.</p>
+    
+    <div class="closed-poem">
+      <p>The clues are waiting.</p>
+      <p>The treasure is waiting.</p>
+      <p class="dramatic-line">But your chance to enter is gone. 🎭</p>
+    </div>
+
+    <div class="closed-actions">
+      <a href="https://chat.whatsapp.com/I0agrWAHRxF7XJnVUAH4il?s=cl&amp;p=a&amp;mlu=4&amp;ilr=4" target="_blank" rel="noopener noreferrer" class="pill whatsapp-btn">JOIN WHATSAPP COMMUNITY ▸</a>
+      <button type="button" class="pill ghost" id="closeVaultBtn">BACK TO CAMPUS</button>
+    </div>
+  </div>
+</section>
 
 <section class="cast" id="cast" hidden aria-label="The Professors">
   <div class="recruit-bg" aria-hidden="true">THE PROFESSORS THE PROFESSORS THE PROFESSORS THE PROFESSORS THE PROFESSORS THE PROFESSORS THE PROFESSORS THE PROFESSORS THE PROFESSORS THE PROFESSORS</div>
@@ -1886,7 +2005,74 @@ function resize() {
 addEventListener('resize', resize);
 resize();
 
+let vaultTourState = {
+  active: false,
+  index: 0,
+  stage: 'flying'
+};
+
+const TOUR_DURATIONS = [4.2, 4.0, 4.8, 4.2, 4.4];
+
+function startVaultTour() {
+  vaultTourState.active = true;
+  vaultTourState.index = 0;
+  vaultTourState.stage = 'flying';
+  flyTo(SHOTS[0], TOUR_DURATIONS[0]);
+}
+
+function updateVaultTour(dt, total) {
+  if (!vaultTourState.active) return;
+
+  if (vaultTourState.stage === 'flying') {
+    if (flight) {
+      placeFlightCamera(dt);
+      
+      // Real-time burst as camera swoops inside building / courtyard at vault (index 2)
+      if (vaultTourState.index === 2 && flight.t >= flight.dur * 0.35 && !flight.exploded && !reduceMotion) {
+        flight.exploded = true;
+        goldBurst();
+        moneyRain();
+        setTimeout(() => { if (vaultTourState.active) goldBurst(); }, 1000);
+        setTimeout(() => { if (vaultTourState.active) { goldBurst(); moneyRain(); } }, 2200);
+      }
+
+      if (flight.t >= flight.dur) {
+        flight = null;
+        if (vaultTourState.index < SHOTS.length - 1) {
+          // Immediately chain the next waypoint continuously without stopping!
+          vaultTourState.index++;
+          flyTo(SHOTS[vaultTourState.index], TOUR_DURATIONS[vaultTourState.index] || 4.2);
+        } else {
+          vaultTourState.stage = 'roaming';
+        }
+      }
+    }
+    return;
+  }
+
+  if (vaultTourState.stage === 'roaming') {
+    // Station 5: Whole Campus Aerial View & Continuous Majestic Roaming
+    camera.clearViewOffset();
+    const polar = THREE.MathUtils.lerp(0.70, 0.90, (Math.sin(total * 0.07) + 1) / 2);
+    let radius = 420 + Math.sin(total * 0.05) * 35;
+    if (camera.aspect < 1) radius *= 1.4;
+    const az = -1.2 + total * 0.045; // gentle, majestic roaming speed
+    camera.position.set(
+      center.x + radius * Math.sin(polar) * Math.cos(az),
+      radius * Math.cos(polar) + 25,
+      center.z + radius * Math.sin(polar) * Math.sin(az)
+    );
+    camera.lookAt(center.x, 12, center.z);
+    camera.updateProjectionMatrix();
+  }
+}
+
 function placeCamera(t, total, dt) {
+  if (document.body.classList.contains('vault-closed-mode')) {
+    updateVaultTour(dt, total);
+    return;
+  }
+
   if (flight) {
     placeFlightCamera(dt);
     return;
@@ -2272,7 +2458,7 @@ const SHOTS = [
   shot(...alongFace(320), 90, faceBearing, -14, 32),            // sealed: the whole campus, straight on
 ];
 
-function flyTo(to) {
+function flyTo(to, customDur) {
   if (camera.aspect < 1) to = { ...to, fov: Math.min(to.fov * 1.4, 85) };   // tall phone screens need a wider view
   const ahead = new THREE.Vector3();
   camera.getWorldDirection(ahead);
@@ -2280,7 +2466,7 @@ function flyTo(to) {
   const dist = from.pos.distanceTo(to.pos), mid = (from.pos.y + to.pos.y) / 2;
   flight = {
     from, to, t: 0,
-    dur: reduceMotion ? .001 : THREE.MathUtils.clamp(dist / 70, 1.2, 3.2),
+    dur: customDur ? customDur : (reduceMotion ? .001 : THREE.MathUtils.clamp(dist / 70, 1.2, 3.2)),
     lift: dist > 30 ? THREE.MathUtils.clamp(Math.max(dist * .3, 32 - mid), 0, 80) : 0,   // rise over rooftops on long moves
   };
 }
@@ -2657,9 +2843,43 @@ function resetRecruit() {
   refreshCrew();
 }
 
+function openVaultClosed() {
+  t = END;
+  document.body.classList.add('heist', 'recruiting', 'vault-closed-mode');
+  const modal = $('vaultClosedModal');
+  if (modal) {
+    modal.hidden = false;
+    if ($('vaultSoundBtn')) $('vaultSoundBtn').textContent = sfx.on ? 'SOUND ON' : 'SOUND OFF';
+  }
+  
+  startVaultTour();
+  playHeistAudio();
+  document.activeElement?.blur();
+}
+
+function closeVaultClosed() {
+  stopHeistAudio();
+  document.body.classList.remove('heist', 'recruiting', 'vault-closed-mode');
+  const modal = $('vaultClosedModal');
+  if (modal) modal.hidden = true;
+  flight = null;
+  vaultTourState.active = false;
+  camera.fov = 40;
+  setCallouts([]);
+}
+
+$('closeVaultBtn')?.addEventListener('click', closeVaultClosed);
+$('vaultSoundBtn')?.addEventListener('click', () => {
+  toggleSound();
+  if ($('vaultSoundBtn')) $('vaultSoundBtn').textContent = sfx.on ? 'SOUND ON' : 'SOUND OFF';
+});
+$('vaultClosedModal')?.addEventListener('click', e => {
+  if (e.target === $('vaultClosedModal')) closeVaultClosed();
+});
+
 $('joinBtn').addEventListener('click', e => {
   e.preventDefault();
-  openRecruit();
+  openVaultClosed();
 });
 backBtn.addEventListener('click', () => (recruitStep === 0 ? closeRecruit() : showStep(recruitStep - 1)));
 
@@ -2864,10 +3084,14 @@ castEl.querySelector('.cast-close').addEventListener('click', closeCast);
 $('castJoin').addEventListener('click', e => {
   e.preventDefault();
   closeCast();
-  openRecruit();
-  burstFrom(nextBtn);
+  openVaultClosed();
 });
-addEventListener('keydown', e => { if (e.key === 'Escape' && !castEl.hidden) closeCast(); });
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (!castEl.hidden) closeCast();
+    if ($('vaultClosedModal') && !$('vaultClosedModal').hidden) closeVaultClosed();
+  }
+});
 
 // ---------- shadows (laptops and desktops only, to keep phones fast) ----------
 const withShadows = innerWidth >= 768;
