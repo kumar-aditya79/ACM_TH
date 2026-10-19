@@ -372,6 +372,12 @@
   .mc-d-down { grid-area: 3/2; }
   .mc-pad-right .mc-btn { width:100%; height:100%; font-size:24px; }
   
+  /* Demo walkthrough (the heist is over): every place a visitor might think it is real says so. */
+  .demo-note { font:14px/1.55 'Roboto Mono', monospace; color:#bbb; margin:0 0 24px; max-width:460px; }
+  .demo-note b { color:#fff; }
+  .demo-strip { font:12px/1.4 'Roboto Mono', monospace; letter-spacing:.12em; color:#fff; background:var(--red);
+                padding:8px 12px; margin:0 0 16px; border-radius:6px; }
+  .demo-pay { color:#bbb; font-size:14px; line-height:1.55; margin:12px 0 0; }
 </style>
 </head>
 <body>
@@ -2239,7 +2245,11 @@ $('panoBtn').addEventListener('click', () =>
 // ---------- recruitment form: each step has its own campus scene, and the camera flies between them ----------
 const CREW_MIN = 1, CREW_MAX = 4;                 // 1 leader + up to 3 members = max 4
 const REGISTRATION_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwuk661BYQ6zNfbmPEfDOaZ0w7tWJKiQ1VREOICYhlRXLqtzXl02p9oxbeyv5mU8yMI6Q/exec';
-const DEV_MODE = new URLSearchParams(location.search).has('dev');   // ?dev = someone testing: no validation, pre-filled crew, nothing sent                 // TODO(ACM): URL that stores registrations (e.g. a Google Apps Script web app)
+// The heist was held on 23 Sept 2026, so the site stays up as a walkthrough for judges and visitors:
+// "TRY THE DEMO" opens the form with a sample crew, NEXT goes straight through, and nothing is sent or paid.
+// Set DEMO_MODE = false to take real registrations again.
+const DEMO_MODE = true;
+const DEV_MODE = DEMO_MODE || new URLSearchParams(location.search).has('dev');   // ?dev = someone testing: no validation, pre-filled crew, nothing sent
 const BRANCHES = [
   'Computer Science',
   'Information Technology',
@@ -2419,6 +2429,7 @@ function refreshCrew() {
 }
 
 function saveDraft() {
+  if (DEMO_MODE) return;
   const values = {};
   for (const el of form.elements) if (el.name && el.type !== 'checkbox') values[el.name] = el.value;
   try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ memberIds, values })); } catch {}
@@ -2426,7 +2437,7 @@ function saveDraft() {
 
 function loadDraft() {
   let draft = null;
-  try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY)); } catch {}
+  if (!DEMO_MODE) try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY)); } catch {}
   for (const id of draft?.memberIds || []) {
     if (1 + memberIds.length < CREW_MAX) addMember(id);
   }
@@ -2434,6 +2445,24 @@ function loadDraft() {
   refreshCrew();
 }
 loadDraft();
+
+// The demo says so on the hero, in the form and where the payment was.
+if (DEMO_MODE) {
+  const hide = el => { if (el) el.style.display = 'none'; };
+  $('joinBtn').textContent = 'TRY THE DEMO ▸';
+  $('castJoin').textContent = 'TRY THE DEMO ▸';
+  document.querySelector('.hud .date').textContent = 'HELD ON 23 SEPT 2026';
+  hide($('count'));
+  $('count').insertAdjacentHTML('afterend', '<p class="demo-note">Registrations are closed. <b>TRY THE DEMO</b> to see how crews signed up: a sample crew is filled in, so just click NEXT. Nothing is saved and nothing is paid.</p>');
+  $('recruitBody').insertAdjacentHTML('afterbegin', '<p class="demo-strip">DEMO · SAMPLE CREW · NOTHING IS SAVED</p>');
+  const pay = document.querySelector('.payment-box');
+  pay.querySelectorAll('.payment-payee, .qr-switcher, .qr-container, label.field').forEach(hide);
+  pay.insertAdjacentHTML('beforeend', '<p class="demo-pay">During registration each crew paid this here by UPI, then entered the transaction ID and uploaded a screenshot. Skipped in the demo.</p>');
+  steps[3].querySelector('.lead').textContent = 'Check every name, then seal the file.';
+  hide($('shareBtn'));
+  hide($('waBtn'));
+  steps[4].querySelector('.note').textContent = 'Every crew got a sealed file like this. Click BACK TO CAMPUS to look around.';
+}
 
 form.addEventListener('input', e => {
   if (e.target.name?.endsWith('Phone')) e.target.value = e.target.value.replace(/[^0-9]/g, '');
@@ -2631,8 +2660,25 @@ function devPrefill() {
   refreshCrew();
 }
 
+// the demo: the same believable crew of four for everyone, from a clean form each time
+function demoPrefill() {
+  resetRecruit();
+  while (1 + memberIds.length < CREW_MAX) addMember();
+  const f = form.elements;
+  f.crew.value = 'The Wagholi Mint';
+  const sample = [['Aarav K.', 0, 3], ['Isha D.', 5, 2], ['Kabir S.', 4, 1], ['Meera J.', 3, 1]];   // name, branch, year
+  ['lead', ...memberIds.map(id => 'm' + id)].forEach((p, k) => {
+    const [name, branch, year] = sample[k];
+    f[p + 'Name'].value = name; f[p + 'Branch'].value = BRANCHES[branch]; f[p + 'Year'].value = YEARS[year];
+    f[p + 'Phone'].value = `90000000${k + 1}0`;
+  });
+  f.leadEmail.value = 'crew@example.com';
+  refreshCrew();
+}
+
 function openRecruit() {
-  if (DEV_MODE) devPrefill();
+  if (DEMO_MODE) demoPrefill();
+  else if (DEV_MODE) devPrefill();
   t = END;
   document.body.classList.add('recruiting');
   form.hidden = false;
@@ -2889,7 +2935,8 @@ if (withShadows) {
 // ---------- after a crew seals its file: THE HEIST HAS BEGUN ----------
 // alarm → hot air balloons lift off and rain cash → the vault's gold rises out of the courtyard →
 // the crew lines up in red jumpsuits and Dalí masks, firing money guns → the sealed file.
-// Everything here is drawn by us: no show footage, logos, photos or music.
+// Everything here is drawn by us: no show footage, logos or photos. The music (audio/heist.mp3) is a 21 s cut of
+// the show's "Bella ciao", chosen by the chapter.
 
 const HEIST_AUDIO_SRC = 'audio/heist.mp3';           // Change this path if your audio file is located elsewhere (e.g., 'audio/heist.mp3' or a URL)
 let customAudio = null, isAudioPlaying = false;
